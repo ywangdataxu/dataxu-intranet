@@ -17,17 +17,27 @@
         <div class='control-group'>
             <label class='col-sm-2 control-label' for='description'>Engineers</label>
             <div class='controls'>
-                <table>
-                    <th>Email</th>
-                    <th>Name</th>
-                    <th></th>
-                    <tr ng-repeat='contact in plan.contacts'>
-                        <td>{{contact.email}}</td>
-                        <td>{{contact.first_name}} {{contact.last_name}}</td>
-                        <td><a ng-click='deleteContact(contact.id)' class='btn btn-small btn-danger'>delete</a></td>
+                <table style='width:80%'>
+                    <tr>
+                        <th style='width:20px'><input type='checkbox' ng-click='toggleEngineers()' id='user_select_all'></></th>
+                        <th>Email</th>
+                        <th>Name</th>
+                    </tr>
+                    <tr ng-repeat='user in plan.contacts'>
+                        <td style='width: 20px'>
+                            <input type='checkbox' checked='checked' id='user_id_{{user.id}}'></input>
+                        </td>
+                        <td>{{user.email}}</td>
+                        <td>{{user.first_name}} {{user.last_name}}</td>
+                    </tr>
+                    <tr ng-repeat='user in users'>
+                        <td style='width: 20px'>
+                            <input type='checkbox' id='user_id_{{user.id}}'></input>
+                        </td>
+                        <td>{{user.email}}</td>
+                        <td>{{user.first_name}} {{user.last_name}}</td>
                     </tr>
                 </table>
-                <a ng-click='deleteContact(contact.id)' class='btn btn-small btn-primary'>add</a>
             </div>
         </div>
         <div class='control-group'>

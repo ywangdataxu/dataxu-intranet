@@ -18,7 +18,13 @@ planApp.factory('Plan', ['$resource', function($resource) {
 planApp.factory('Users', ['$resource', function($resource) {
     return $resource('/api/users', {}, {
         query: {method: 'GET', isArray: true},
-        create: {method: 'POST'}
+        create: {method: 'POST'},
+    });
+}]);
+
+planApp.factory('FilterUsers', ['$resource', function($resource) {
+    return $resource('/api/users/plan/:id', {}, {
+        query: {method: 'GET', isArray: true},
     });
 }]);
 
@@ -58,23 +64,45 @@ planApp.controller('PlanListController', ['$scope', '$location', 'Plans', functi
     }
 }]);
 
-planApp.controller('PlanDetailController', ['$scope', '$location', '$routeParams', 'Plan', function($scope, $location, $routeParams, Plan) {
+planApp.controller('PlanDetailController', ['$scope', '$location', '$routeParams', 'Plan', 'Users', 'FilterUsers', function($scope, $location, $routeParams, Plan, Users, FilterUsers) {
     $scope.plan = Plan.show({id: $routeParams.id});
+    $scope.users = FilterUsers.query({id: $routeParams.id});
     
     $scope.cancel = function() {
         $location.path('/list');
     }
     
     $scope.updatePlan = function() {
+        for (var i = 0; i < $scope.users.length; i++) {
+            var currUser = $scope.users[i];
+            var checked = document.getElementById('user_id_' + currUser.id).checked;
+            if (checked) {
+                $scope.plan.contacts.push(currUser);
+            }
+        }
+        
+        for (var i = 0; i < $scope.plan.contacts.length; i++) {
+            var currUser = $scope.plan.contacts[i];
+            var checked = document.getElementById('user_id_' + currUser.id).checked;
+            if (!checked) {
+                $scope.plan.contacts.splice(i, 1);
+            }
+        }
+        
         Plan.update($scope.plan);
         $location.path('/list');
     }
-    
-    $scope.deleteContact = function(contactId) {
+
+    $scope.toggleEngineers = function() {
+        var checked = document.getElementById('user_select_all').checked;
+        for (var i = 0; i < $scope.users.length; i++) {
+            var currUser = $scope.users[i];
+            document.getElementById('user_id_' + currUser.id).checked = checked;
+        }
+        
         for (var i = 0; i < $scope.plan.contacts.length; i++) {
-            if ($scope.plan.contacts[i].id == contactId) {
-                $scope.plan.contacts.splice(i, 1);
-            }
+            var currUser = $scope.plan.contacts[i];
+            document.getElementById('user_id_' + currUser.id).checked = checked;
         }
     }
 }]);

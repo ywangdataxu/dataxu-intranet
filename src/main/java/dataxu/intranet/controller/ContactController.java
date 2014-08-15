@@ -1,6 +1,8 @@
 package dataxu.intranet.controller;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,12 +13,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import dataxu.intranet.entity.Contact;
+import dataxu.intranet.entity.Plan;
 import dataxu.intranet.repository.ContactRepository;
+import dataxu.intranet.repository.PlanRepository;
 
 @Controller
 public class ContactController {
     @Autowired
     private ContactRepository contactRepository;
+    @Autowired
+    private PlanRepository planRepository;
 
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     public String contacts() {
@@ -52,5 +58,31 @@ public class ContactController {
     @ResponseBody
     public Contact updatecontact(@RequestBody Contact contact) {
         return contactRepository.save(contact);
+    }
+
+    /**
+     * hack: ugly! only return contacts that are not in the plan
+     * 
+     * @param planId
+     * @return
+     */
+    @RequestMapping(value = "/api/users/plan/{planId}", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Contact> getcontacts(@PathVariable("planId") Integer planId) {
+        List<Contact> contacts = contactRepository.findAll();
+        Plan p = planRepository.findOne(planId);
+        Set<Contact> contactsInPlan = p.getContacts();
+
+        for (Iterator<Contact> itr = contacts.iterator(); itr.hasNext();) {
+            Contact curr = itr.next();
+            for (Contact c : contactsInPlan) {
+                if (curr.getId() == c.getId()) {
+                    itr.remove();
+                    break;
+                }
+            }
+        }
+
+        return contacts;
     }
 }
