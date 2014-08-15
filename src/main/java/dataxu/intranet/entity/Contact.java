@@ -1,12 +1,18 @@
 package dataxu.intranet.entity;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "contact")
@@ -25,6 +31,26 @@ public class Contact {
 
     @Column(name = "last_name")
     private String lastName;
+
+    @Column(name = "created_on", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdOn;
+
+    @Column(name = "updated_on", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updatedOn;
+
+    @PrePersist
+    protected void prePersist() {
+        Date date = new Date();
+        this.createdOn = date;
+        this.updatedOn = date;
+    }
+
+    @PreUpdate
+    protected void preUpdate() {
+        this.updatedOn = new Date();
+    }
 
     public Integer getId() {
         return id;
@@ -56,5 +82,13 @@ public class Contact {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public Date getCreatedOn() {
+        return createdOn;
+    }
+
+    public Date getUpdatedOn() {
+        return updatedOn;
     }
 }

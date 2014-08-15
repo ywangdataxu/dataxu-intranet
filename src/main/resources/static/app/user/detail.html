@@ -1,0 +1,30 @@
+<div>
+    <h1><a href="#/users/list">User List</a> &gt; User Detail</h1>
+
+    <form class='form-horizontal'>
+        <div class='control-group'>
+            <label class='col-sm-2 control-label' for='email'>Email</label>
+            <div class='controls'>
+                <input type='text' id='email' ng-model='user.email' class='input-normal' style='width:80%'/>
+            </div>
+        </div>
+        <div class='control-group'>
+            <label class='col-sm-2 control-label' for='first_name'>First Name</label>
+            <div class='controls'>
+                 <input type='text' id='first_name' ng-model='user.first_name' class='input-normal' style='width:80%'/>
+            </div>
+        </div>
+        <div class='control-group'>
+            <label class='col-sm-2 control-label' for='last_name'>First Name</label>
+            <div class='controls'>
+                 <input type='text' id='last_name' ng-model='user.last_name' class='input-normal' style='width:80%'/>
+            </div>
+        </div>
+        <div class='control-group'>
+            <div class='center buttons'>
+                <a ng-click='cancel()' class='btn btn-small btn-primary'>Cancel</a>
+                <a ng-click='updateUser()' class='btn btn-small btn-primary'>Update User</a>
+            </div>
+        </div>
+    </form>
+</div>
