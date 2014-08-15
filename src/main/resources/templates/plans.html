@@ -9,6 +9,7 @@
     <link th:href='@{/content/themes/base/jquery-ui.css}' rel='stylesheet' />
     <link rel='stylesheet' href='/thymleaf/css/main.css' />
     <link th:href='@{/content/app.css}' rel='stylesheet' />
+    <link th:href='@{/content/plan/plan.css}' rel='stylesheet' />
     
     <script th:src='@{/webjars/jquery/2.1.0/jquery.js}'></script>
     <script th:src='@{/scripts/jquery-ui-1.10.4.js}'></script>
@@ -28,7 +29,7 @@
     <script th:src='@{/app/plan-application.js}'></script>
 </head>
 <body ng-app='PlanApplication'>
-    <div ng-view=''>
+    <div ng-view='' class='centered'>
     </div>
 </body>
 </html>

@@ -1,0 +1,10 @@
+div.centered {
+	margin: 0 auto;
+	text-align: left;
+	width: 90%;
+}
+
+div.buttons {
+	text-align: center;
+	margin: 10px;
+}

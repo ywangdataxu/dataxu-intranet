@@ -1,6 +1,27 @@
-<table>
-<tr>
-    <td>Plan Name:</td>
-    <td>{{plan.name}}</td>
-</tr>
-</table>
+<div class='container'>
+    <h1>Plan Detail</h1>
+
+    <form class='form-horizontal'>
+        <div class='control-group'>
+            <label class='col-sm-2 control-label' for='name'>Plan Name</label>
+            <div class='controls'>
+                <input type='text' id='name' ng-model='plan.name' />
+            </div>
+        </div>
+        <div class='control-group'>
+            <label class='col-sm-2 control-label' for='description'>Description</label>
+            <div class='controls'>
+                <textarea id='description' ng-model='plan.description'></textarea>
+            </div>
+        </div>
+        <div class='control-group'>
+            <div class='center buttons'>
+                <!-- user-detail.html: -->
+                <a ng-click='cancel()' class='btn btn-small btn-primary'>cancel</a>
+                <a ng-click='updatePlan()' class='btn btn-small btn-primary'>update plan</a>
+                <!-- user-creation.html: -->
+                <a ng-click='createNewPlan()' class='btn btn-small btn-primary'>create new plan</a>
+            </div>
+        </div>
+    </form>
+</div>

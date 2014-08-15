@@ -18,7 +18,7 @@ planApp.controller('PlanListController', ['$scope', '$location', 'Plans', functi
     $scope.plans = Plans.query(); 
     
     $scope.editPlan = function(planId) {
-        $location.path("/" + planId);
+        $location.path('/' + planId);
     }
     
     $scope.deletePlan = function(planId) {
@@ -30,6 +30,15 @@ planApp.controller('PlanListController', ['$scope', '$location', 'Plans', functi
 
 planApp.controller('PlanDetailController', ['$scope', '$location', '$routeParams', 'Plan', function($scope, $location, $routeParams, Plan) {
     $scope.plan = Plan.show({id: $routeParams.id});
+    
+    $scope.cancel = function() {
+        $location.path('/');
+    }
+    
+    $scope.updatePlan = function() {
+        Plan.update($scope.plan);
+        $location.path('/');
+    }
 }]);
 
 

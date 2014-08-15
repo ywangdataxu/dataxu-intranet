@@ -10,7 +10,8 @@ CREATE TABLE contact (
 
 CREATE TABLE plan (
     id serial PRIMARY KEY,
-    name varchar(255),
+    name varchar(255) NOT NULL,
+    description text;
     created_on timestamp NOT NULL DEFAULT current_timestamp,
     updated_on timestamp NOT NULL DEFAULT current_timestamp,
     CONSTRAINT udx_plan_namel UNIQUE(name)

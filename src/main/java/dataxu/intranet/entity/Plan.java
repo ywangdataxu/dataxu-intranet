@@ -26,6 +26,9 @@ public class Plan {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "description")
+    private String description;
+
     @Column(name = "created_on", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdOn;
@@ -46,10 +49,12 @@ public class Plan {
         this.updatedOn = new Date();
     }
 
-    @Override
-    public String toString() {
-        return "Plan [id=" + id + ", name=" + name + ", createdOn=" + createdOn
-                + ", updatedOn=" + updatedOn + "]";
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Integer getId() {
