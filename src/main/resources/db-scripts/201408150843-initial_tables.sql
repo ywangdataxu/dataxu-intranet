@@ -33,4 +33,11 @@ CREATE TABLE contact_velocity (
     CONSTRAINT unx_contact_chapter UNIQUE(contact_id, chapter_id)
 );
 
+CREATE TABLE plan_contact (
+    id serial PRIMARY KEY,
+    plan_id int NOT NULL REFERENCES plan(id),
+    contact_id int NOT NULL REFERENCES contact(id),
+    CONSTRAINT unx_plan_contact UNIQUE(plan_id, contact_id)
+);
+
 END;

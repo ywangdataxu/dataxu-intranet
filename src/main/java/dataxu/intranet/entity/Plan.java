@@ -1,12 +1,18 @@
 package dataxu.intranet.entity;
 
 import java.util.Date;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
@@ -37,11 +43,23 @@ public class Plan {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedOn;
 
+    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
+    @JoinTable(name = "plan_contact", joinColumns = { @JoinColumn(name = "plan_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "contact_id", referencedColumnName = "id") })
+    private Set<Contact> contacts;
+
     @PrePersist
     protected void prePersist() {
         Date date = new Date();
         this.createdOn = date;
         this.updatedOn = date;
+    }
+
+    public Set<Contact> getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(Set<Contact> contacts) {
+        this.contacts = contacts;
     }
 
     @PreUpdate

@@ -69,6 +69,14 @@ planApp.controller('PlanDetailController', ['$scope', '$location', '$routeParams
         Plan.update($scope.plan);
         $location.path('/list');
     }
+    
+    $scope.deleteContact = function(contactId) {
+        for (var i = 0; i < $scope.plan.contacts.length; i++) {
+            if ($scope.plan.contacts[i].id == contactId) {
+                $scope.plan.contacts.splice(i, 1);
+            }
+        }
+    }
 }]);
 
 planApp.controller('CreatePlanController', ['$scope', '$location', '$routeParams', 'Plans', function($scope, $location, $routeParams, Plans) {
@@ -104,6 +112,7 @@ planApp.controller('UserListController', ['$scope', '$location', 'Users', functi
 
 planApp.controller('UserDetailController', ['$scope', '$location', '$routeParams', 'User', 'Chapters', function($scope, $location, $routeParams, User, Chapters) {
     $scope.user = User.show({id: $routeParams.id});
+    $scope.chapters = Chapters.query();
     
     $scope.cancel = function() {
         $location.path('/users/list');
@@ -115,8 +124,14 @@ planApp.controller('UserDetailController', ['$scope', '$location', '$routeParams
     }
 }]);
 
-planApp.controller('CreateUserController', ['$scope', '$location', '$routeParams', 'Users', function($scope, $location, $routeParams, Users) {
-    $scope.user = {};
+planApp.controller('CreateUserController', ['$scope', '$location', '$routeParams', 'Users', 'Chapters', function($scope, $location, $routeParams, Users, Chapters) {
+    // I know it is stupid.
+    $scope.user = {velocities: [{chapter: {name: 'LS', id: 1}, velocity: 0},
+                                {chapter: {name: 'RTS', id: 2}, velocity: 0},
+                                {chapter: {name: 'RWH', id: 3}, velocity: 0},
+                                {chapter: {name: 'UI', id: 4}, velocity: 0}
+                                ]};
+    $scope.chapters = Chapters.query();
     
     $scope.cancel = function() {
         $location.path('/users/list');

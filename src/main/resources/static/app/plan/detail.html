@@ -15,6 +15,22 @@
             </div>
         </div>
         <div class='control-group'>
+            <label class='col-sm-2 control-label' for='description'>Engineers</label>
+            <div class='controls'>
+                <table>
+                    <th>Email</th>
+                    <th>Name</th>
+                    <th></th>
+                    <tr ng-repeat='contact in plan.contacts'>
+                        <td>{{contact.email}}</td>
+                        <td>{{contact.first_name}} {{contact.last_name}}</td>
+                        <td><a ng-click='deleteContact(contact.id)' class='btn btn-small btn-danger'>delete</a></td>
+                    </tr>
+                </table>
+                <a ng-click='deleteContact(contact.id)' class='btn btn-small btn-primary'>add</a>
+            </div>
+        </div>
+        <div class='control-group'>
             <div class='center buttons'>
                 <a ng-click='cancel()' class='btn btn-small btn-primary'>Cancel</a>
                 <a ng-click='updatePlan()' class='btn btn-small btn-primary'>Update Plan</a>
