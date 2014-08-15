@@ -1,36 +1,34 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th='http://www.thymeleaf.org'>
 <head>
-    <title>Angular, Spring Boot, Java 8 and others</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link th:href="@{/content/bootstrap.css}" rel="stylesheet" />
-    <link th:href="@{/content/bootstrap-theme.css}" rel="stylesheet" />
-    <link th:href="@{/content/font-awesome.css}" rel="stylesheet" />
-    <link th:href="@{/content/themes/base/jquery-ui.css}" rel="stylesheet" />
-    <link th:href="@{/content/app.css}" rel="stylesheet" />
+    <title>Agile Planning</title>
+    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+    <link th:href='@{/content/bootstrap.css}' rel='stylesheet' />
+    <link th:href='@{/content/bootstrap-theme.css}' rel='stylesheet' />
+    <link th:href='@{/content/font-awesome.css}' rel='stylesheet' />
+    <link th:href='@{/content/themes/base/jquery-ui.css}' rel='stylesheet' />
+    <link rel='stylesheet' href='/thymleaf/css/main.css' />
+    <link th:href='@{/content/app.css}' rel='stylesheet' />
     
-    <script th:src="@{/webjars/jquery/2.1.0/jquery.js}"></script>
-    <script th:src="@{/scripts/jquery-ui-1.10.4.js}"></script>
-    <script th:src="@{/scripts/underscore.js}"></script>
-    <script th:src="@{/scripts/angular.js}"></script>
-    <script th:src="@{/scripts/angular-resource.js}"></script>
-    <script th:src="@{/scripts/angular-route.js}"></script>
-    <script th:src="@{/scripts/ui-date.js}"></script>
-    <script th:src="@{/scripts/ui-bootstrap-0.10.0.js}"></script>
+    <script th:src='@{/webjars/jquery/2.1.0/jquery.js}'></script>
+    <script th:src='@{/scripts/jquery-ui-1.10.4.js}'></script>
+    <script th:src='@{/scripts/underscore.js}'></script>
+    <script th:src='@{/scripts/angular.js}'></script>
+    <script th:src='@{/scripts/angular-resource.js}'></script>
+    <script th:src='@{/scripts/angular-route.js}'></script>
+    <script th:src='@{/scripts/ui-date.js}'></script>
+    <script th:src='@{/scripts/ui-bootstrap-0.10.0.js}'></script>
 
-    <script th:src="@{/app/app.js}"></script>
-    <script th:src="@{/app/common/common.js}"></script>
-    <script th:src="@{/app/angular/caching/cacheInterceptor.js}"></script>
-    <script th:src="@{/app/angular/data/data.js}"></script>
-    <script th:src="@{/app/angular/loader/loader.js}"></script>
-    <script th:src="@{/app/angular/loader/loader.directive.js}"></script>
-    <script th:src="@{/app/plan/plan-application.js}"></script>
+    <script th:src='@{/app/app.js}'></script>
+    <script th:src='@{/app/common/common.js}'></script>
+    <script th:src='@{/app/angular/caching/cacheInterceptor.js}'></script>
+    <script th:src='@{/app/angular/data/data.js}'></script>
+    <script th:src='@{/app/angular/loader/loader.js}'></script>
+    <script th:src='@{/app/angular/loader/loader.directive.js}'></script>
+    <script th:src='@{/app/plan-application.js}'></script>
 </head>
-<body ng-app="PlanApplication">
-    <div ng-view="">
-    </div>
-    <div ng-controller="PlanController">
-        <span ng-repeat="p in plans">{{p.name}}</span>
+<body ng-app='PlanApplication'>
+    <div ng-view=''>
     </div>
 </body>
 </html>

@@ -1,0 +1,21 @@
+<table class="table table-condensed">
+    <thead>
+        <tr>
+            <td>Plan Name</td>
+            <td>Created On</td>
+            <td>Updated On</td>
+            <td width='20px'></td>
+            <td width='20px'></td>
+        </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat='plan in plans'>
+        <td>{{plan.name}}</a></td>
+        <td>{{plan.created_on | date:'medium'}}</td>
+        <td>{{plan.updated_on | date:'medium'}}</td>
+        <td><a ng-click='editPlan(plan.id)' class='btn btn-small btn-primary'>edit</a></td>
+        <td><a ng-click='deletePlan(plan.id)' class='btn btn-small btn-danger'>delete</a></td>
+    </tr>
+    </tbody>
+</table>
+<a ng-click='createNewPlan()' class='btn btn-small btn-default'>Create new plan</a>

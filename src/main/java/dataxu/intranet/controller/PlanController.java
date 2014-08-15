@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -25,7 +26,18 @@ public class PlanController {
     @ResponseBody
     public List<Plan> getPlans() {
         List<Plan> plans = planRepository.findAll();
-        System.out.println("Got plans: " + plans);
         return plans;
+    }
+
+    @RequestMapping(value = "/api/plans/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public Plan getPlan(@PathVariable("id") Integer id) {
+        return planRepository.findOne(id);
+    }
+
+    @RequestMapping(value = "/api/plans", method = RequestMethod.DELETE)
+    @ResponseBody
+    public void deletePlan(Integer id) {
+        planRepository.delete(id);
     }
 }
