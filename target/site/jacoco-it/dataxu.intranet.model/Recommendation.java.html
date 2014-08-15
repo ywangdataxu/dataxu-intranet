@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Recommendation.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">intranet</a> &gt; <a href="index.source.html" class="el_package">dataxu.intranet.model</a> &gt; <span class="el_source">Recommendation.java</span></div><h1>Recommendation.java</h1><pre class="source lang-java linenums">package dataxu.intranet.model;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.Objects;
+import java.util.UUID;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+<span class="fc" id="L10">public class Recommendation {</span>
+    @JsonProperty(&quot;Id&quot;)
+    private UUID id;
+
+    @JsonProperty(&quot;Title&quot;)
+    private String title;
+
+    public UUID getId() {
+<span class="nc" id="L18">        return id;</span>
+    }
+
+    public void setId(UUID id) {
+<span class="fc" id="L22">        this.id = id;</span>
+<span class="fc" id="L23">    }</span>
+
+    public String getTitle() {
+<span class="nc" id="L26">        return title;</span>
+    }
+
+    public void setTitle(String title) {
+<span class="fc" id="L30">        this.title = title;</span>
+<span class="fc" id="L31">    }</span>
+
+    @Override
+    public boolean equals(Object other) {
+<span class="pc bpc" id="L35" title="1 of 2 branches missed.">        if (this == other) {</span>
+<span class="nc" id="L36">            return true;</span>
+        }
+
+<span class="pc bpc" id="L39" title="2 of 4 branches missed.">        if (other == null || getClass() != other.getClass()) {</span>
+<span class="nc" id="L40">            return false;</span>
+        }
+
+<span class="fc" id="L43">        Recommendation that = (Recommendation) other;</span>
+<span class="fc" id="L44">        return Objects.equals(id, that.id);</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="fc" id="L49">        return Objects.hash(id);</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L54">        return com.google.common.base.Objects.toStringHelper(this).add(&quot;id&quot;, id).add(&quot;title&quot;, title).toString();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.0.201403182114</span></div></body></html>

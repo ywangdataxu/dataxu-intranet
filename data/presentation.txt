@@ -1,0 +1,81 @@
+* windows setup
+    export JAVA_HOME=/c/dev/sdks/jdk-1.8.0
+    export M2_HOME=/c/dev/tools/apache-maven-3.0.5
+    export PATH=$JAVA_HOME/bin:$M2_HOME/bin:$PATH
+
+    java -version
+    mvn -version
+
+    cd /c/dev/work/github/fchopard/AngularBootstrapSpringBoot/
+    mvn clean verify
+
+* Introduction
+	* Historiquement Java + Web = image lourde
+	* Forte tendance du frontend
+	* Présentation de Mathieu
+	* Revister le développement Web Java avec les outils d'aujourd'hui
+	* https://github.com/fchopard/AngularBootstrapSpringBoot
+
+* Historique
+	* Java SE
+	* Surtout JEE
+	* Nouveaux arrivants pour adresser les faiblesses du standard
+	* Java 8, Spring Boot, Thymleaf, AngularJS
+
+* Java 8
+	* https://jdk8.java.net/download.html
+	* http://www.techempower.com/blog/2013/03/26/everything-about-java-8/
+	* http://www.javacodegeeks.com/2014/03/a-deeper-look-into-the-java-8-date-and-time-api.html
+	* NameController
+	* ChuckNorrisRandomStringRepository
+	* ToImmutableListCollector
+	* JsonRecommendationRepository
+	* Client.registrationDate
+	* JacksonConfig
+
+* Spring Boot
+	* Outil pour créer facilement des applications Spring déployable en production
+	* http://projects.spring.io/spring-boot/
+		* partis pris intelligents
+	* AutoConfigure: automatic spring configuration basée sur les dépendances
+		* Application.java
+	* Ensemble de starter fournissant les bonnes dépendances maven
+		* http://projects.spring.io/spring-boot/docs/spring-boot-starters/README.html
+		* http://repo.spring.io/libs-milestone/org/springframework/boot/
+	* pom
+	* logging
+	* configuration
+	* Loader
+		* jar or war: http://spring.io/blog/2014/03/07/deploying-spring-boot-applications
+	* run jar or inplace
+	* Actuator, plus loin
+
+* Spring MVC
+	* NameController avec RestClient
+		* ResponseEntity et exception
+	* CustomRandomHeaderFilter
+	* WebFilterConfig
+	* Client...
+	* Data validation in ClientController and Client
+	* Webjars
+		* http://www.webjars.org
+
+* Thymleaf
+	* http://www.thymeleaf.org/
+	* http://itutorial.thymeleaf.org/
+	* example.html
+	* http://www.thymeleaf.org/doc/html/Using-Thymeleaf.html#standard-expression-syntax
+	* index.html
+
+* Spring Security
+	* chuck / boss
+	* csrf
+
+* Actuators
+	* http://projects.spring.io/spring-boot/docs/spring-boot-actuator/docs/Features.html
+
+* Tests
+	* Unit tests
+	* Mockito + Assertj
+	* Integration tests
+	* Code coverage

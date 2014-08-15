@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Thymleaf Example</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="../static/thymleaf/css/main.css" th:href="@{/thymleaf/css/main.css}" />
+</head>
+
+<body>
+
+<p th:text="${exampleText}">Text to be replaced</p>
+
+<p th:if="${now}" th:text="${#dates.format(now, 'dd.MMM.yyyy')}">06.Mar.2014</p>
+
+<table>
+    <thead>
+    <tr>
+        <th>Pos.</th>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Company</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="client : ${clients}">
+        <td th:text="${clientStat.count}">1</td>
+        <td th:text="${client.firstName}">Fred</td>
+        <td th:text="${client.lastName}">Chop</td>
+        <td th:text="${client.company}">?</td>
+    </tr>
+    </tbody>
+</table>
+
+<ul>
+    <li><a href="#" th:href="@{/another/example}">Example 2</a></li>
+</ul>
+
+</body>
+
+</html>
