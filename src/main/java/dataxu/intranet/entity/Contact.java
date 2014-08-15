@@ -1,18 +1,25 @@
 package dataxu.intranet.entity;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "contact")
@@ -39,6 +46,19 @@ public class Contact {
     @Column(name = "updated_on", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedOn;
+
+    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
+    @JoinColumn(name = "contact_id", nullable = false)
+    @JsonManagedReference
+    private List<ContactVelocity> velocities;
+
+    public List<ContactVelocity> getVelocities() {
+        return velocities;
+    }
+
+    public void setVelocities(List<ContactVelocity> velocities) {
+        this.velocities = velocities;
+    }
 
     @PrePersist
     protected void prePersist() {

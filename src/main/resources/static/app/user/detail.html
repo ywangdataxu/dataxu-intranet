@@ -21,6 +21,22 @@
             </div>
         </div>
         <div class='control-group'>
+            <label class='col-sm-2 control-label' for='velocities'>Velocity</label>
+            <div class='controls'  style='width:%80'>
+                <table style='width:%80'>
+                    <tr ng-repeat='velocity in user.velocities'>
+                        <td>
+                            {{velocity.chapter.name}}
+                        </td>
+                        <td>
+                            <input type='text' ng-model='user.velocities[$index].velocity' class='input-normal'>
+                            </input>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class='control-group'>
             <div class='center buttons'>
                 <a ng-click='cancel()' class='btn btn-small btn-primary'>Cancel</a>
                 <a ng-click='updateUser()' class='btn btn-small btn-primary'>Update User</a>

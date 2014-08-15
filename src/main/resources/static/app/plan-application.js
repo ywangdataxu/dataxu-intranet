@@ -30,6 +30,13 @@ planApp.factory('User', ['$resource', function($resource) {
     });
 }]);
 
+planApp.factory('Chapters', ['$resource', function($resource) {
+    return $resource('/api/chapters', {}, {
+        query: {method: 'GET', isArray: true}
+    });
+}]);
+
+
 planApp.controller('PlanListController', ['$scope', '$location', 'Plans', function($scope, $location, Plans) {
     $scope.plans = Plans.query(); 
     
@@ -95,7 +102,7 @@ planApp.controller('UserListController', ['$scope', '$location', 'Users', functi
     }
 }]);
 
-planApp.controller('UserDetailController', ['$scope', '$location', '$routeParams', 'User', function($scope, $location, $routeParams, User) {
+planApp.controller('UserDetailController', ['$scope', '$location', '$routeParams', 'User', 'Chapters', function($scope, $location, $routeParams, User, Chapters) {
     $scope.user = User.show({id: $routeParams.id});
     
     $scope.cancel = function() {
