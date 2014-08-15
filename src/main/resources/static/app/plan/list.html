@@ -1,7 +1,9 @@
+<h1>Planning List</h1>
 <table class="table table-condensed">
     <thead>
         <tr>
             <td>Plan Name</td>
+            <td>Description</td>
             <td>Created On</td>
             <td>Updated On</td>
             <td width='20px'></td>
@@ -11,6 +13,7 @@
     <tbody>
     <tr ng-repeat='plan in plans'>
         <td>{{plan.name}}</a></td>
+        <td>{{plan.description | cut:true:100:'...'}}</td>
         <td>{{plan.created_on | date:'medium'}}</td>
         <td>{{plan.updated_on | date:'medium'}}</td>
         <td><a ng-click='editPlan(plan.id)' class='btn btn-small btn-primary'>edit</a></td>

@@ -42,6 +42,12 @@ public class PlanController {
         planRepository.delete(id);
     }
 
+    @RequestMapping(value = "/api/plans", method = RequestMethod.POST)
+    @ResponseBody
+    public Plan createPlan(@RequestBody Plan plan) {
+        return planRepository.save(plan);
+    }
+
     @RequestMapping(value = "/api/plans/{id}", method = RequestMethod.PUT)
     @ResponseBody
     public Plan updatePlan(@RequestBody Plan plan) {
