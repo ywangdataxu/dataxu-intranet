@@ -1,10 +1,14 @@
 <div>
-    <h1><a href='#/'>Plan List</a> &gt; <a href='#/detail/{{plan.id}}'>{{plan.name}}</a> &gt; Schedule</h1>
+    <h1>
+        <a href='#/'>Plan List</a> &gt; <a href='#/detail/{{plan.id}}'>{{plan.name}}</a> &gt; Schedule
+    </h1>
 
-    <div ng-repeat='schedule in schedules' style='border:1px solid red'>
-        
-        <div ng-repeat='s in schedule.plan_schedules'>
-            {{s.date}} : {{s.velocity}}
-        </div>
+<!--     <div ng-repeat='schedule in schedules' style='border: 1px solid red'>
+
+        <div ng-repeat='s in schedule.plan_schedules'>{{s.date}} : {{s.velocity}}</div>
+    </div> -->
+
+    <div ng-app="chartjs-directive">
+        <chart value="myChart"></chart>
     </div>
 </div>

@@ -1,4 +1,4 @@
-var planApp = angular.module('PlanApplication', ['ngResource', 'ngRoute', 'ui.bootstrap']);
+var planApp = angular.module('PlanApplication', ['ngResource', 'ngRoute', 'ui.bootstrap', 'chartjs-directive']);
 
 planApp.factory('Plans', ['$resource', function($resource) {
     return $resource('/api/plans', {}, {
@@ -129,6 +129,29 @@ planApp.controller('PlanDetailController', ['$scope', '$location', '$routeParams
 planApp.controller('PlanScheduleController', ['$scope', '$location', '$routeParams', 'Plan', 'Users', 'PlanSchedules', function($scope, $location, $routeParams, Plan, Users, PlanSchedules) {
     $scope.plan = Plan.show({id: $routeParams.id});
     $scope.schedules = PlanSchedules.query({id: $routeParams.id});
+
+    
+    var data = {
+            labels : ["January","February","March","April","May","June","July"],
+            datasets : [
+              {
+                fillColor : "rgba(220,220,220,0.5)",
+                strokeColor : "rgba(220,220,220,1)",
+                pointColor : "rgba(220,220,220,1)",
+                pointStrokeColor : "#fff",
+                data : [65,59,90,81,56,55,40]
+              },
+              {
+                fillColor : "rgba(151,187,205,0.5)",
+                strokeColor : "rgba(151,187,205,1)",
+                pointColor : "rgba(151,187,205,1)",
+                pointStrokeColor : "#fff",
+                data : [28,48,40,19,96,27,100]
+              }
+            ]
+          }
+
+    $scope.myChart = {"data": data, "options": {} };
 }]);
 
 
