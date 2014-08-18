@@ -1,5 +1,6 @@
 package dataxu.intranet.entity;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -53,6 +54,7 @@ public class Contact {
     private List<ContactVelocity> velocities;
 
     public List<ContactVelocity> getVelocities() {
+        Collections.sort(velocities);
         return velocities;
     }
 

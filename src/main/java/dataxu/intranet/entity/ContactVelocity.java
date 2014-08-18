@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "contact_velocity")
-public class ContactVelocity {
+public class ContactVelocity implements Comparable<ContactVelocity> {
     @Id
     @SequenceGenerator(name = "contact_seq", sequenceName = "contact_id_seq")
     @GeneratedValue(generator = "contact_seq", strategy = GenerationType.IDENTITY)
@@ -64,5 +64,10 @@ public class ContactVelocity {
 
     public void setVelocity(Integer velocity) {
         this.velocity = velocity;
+    }
+
+    @Override
+    public int compareTo(ContactVelocity o) {
+        return this.chapter.getName().compareTo(o.chapter.getName());
     }
 }

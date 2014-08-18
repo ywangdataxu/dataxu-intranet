@@ -1,4 +1,4 @@
-var planApp = angular.module('PlanApplication', ['ngResource', 'ngRoute']);
+var planApp = angular.module('PlanApplication', ['ngResource', 'ngRoute', 'ui.bootstrap']);
 
 planApp.factory('Plans', ['$resource', function($resource) {
     return $resource('/api/plans', {}, {
@@ -219,22 +219,4 @@ planApp.filter('cut', function() {
     };
 });
 
-planApp.directive('datepicker', function() {
-    return {
-        restrict: 'A',
-        require : 'ngModel',
-        link : function (scope, element, attrs, ngModelCtrl) {
-            $(function(){
-                element.datepicker({
-                    dateFormat:'yy-mm-dd',
-                    onSelect:function (date) {
-                        scope.$apply(function () {
-                            ngModelCtrl.$setViewValue(date);
-                        });
-                    }
-                });
-            });
-        }
-    }
-});
 
