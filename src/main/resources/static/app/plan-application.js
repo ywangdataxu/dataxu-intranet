@@ -84,15 +84,16 @@ planApp.controller('PlanDetailController', ['$scope', '$location', '$routeParams
             var currUser = $scope.users[i];
             var checked = document.getElementById('user_id_' + currUser.id).checked;
             if (checked) {
-                $scope.plan.contacts.push(currUser);
+                var chapterId =  $("input[type='radio'][name='contact_chapter_" + currUser.id + "']:checked").val();
+                $scope.plan.plan_contacts.push({contact:currUser, chapter_id: chapterId, plan_id: $scope.plan.id});
             }
         }
         
-        for (var i = 0; i < $scope.plan.contacts.length; i++) {
-            var currUser = $scope.plan.contacts[i];
+        for (var i = 0; i < $scope.plan.plan_contacts.length; i++) {
+            var currUser = $scope.plan.plan_contacts[i].contact;
             var checked = document.getElementById('user_id_' + currUser.id).checked;
             if (!checked) {
-                $scope.plan.contacts.splice(i, 1);
+                $scope.plan.plan_contacts.splice(i, 1);
             }
         }
         
@@ -107,8 +108,8 @@ planApp.controller('PlanDetailController', ['$scope', '$location', '$routeParams
             document.getElementById('user_id_' + currUser.id).checked = checked;
         }
         
-        for (var i = 0; i < $scope.plan.contacts.length; i++) {
-            var currUser = $scope.plan.contacts[i];
+        for (var i = 0; i < $scope.plan.plan_contacts.length; i++) {
+            var currUser = $scope.plan.plan_contacts[i].contact;
             document.getElementById('user_id_' + currUser.id).checked = checked;
         }
     }

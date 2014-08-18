@@ -17,7 +17,7 @@
     <tr ng-repeat='plan in plans'>
         <td>{{plan.name}}</a></td>
         <td>{{plan.description | cut:true:100:'...'}}</td>
-        <td>{{plan.contacts.length}}</td>
+        <td>{{plan.plan_contacts.length}}</td>
         <td>{{plan.start_date}}</td>
         <td>{{plan.end_date}}</td>
         <td>{{plan.created_on | date:'medium'}}</td>

@@ -35,6 +35,18 @@ public class ContactSchedule implements Comparable<ContactSchedule> {
     @Column(name = "reason")
     private String reason;
 
+    public ContactSchedule() {
+
+    }
+
+    public ContactSchedule(ContactSchedule c, Date newStartDate, Date newEndDate) {
+        this.startDate = newStartDate;
+        this.endDate = newEndDate;
+        this.reason = c.reason;
+        this.id = c.id;
+        this.contactId = c.contactId;
+    }
+
     public String getReason() {
         return reason;
     }

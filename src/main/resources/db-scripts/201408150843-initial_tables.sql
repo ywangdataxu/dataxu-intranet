@@ -39,6 +39,7 @@ CREATE TABLE plan_contact (
     id serial PRIMARY KEY,
     plan_id int NOT NULL REFERENCES plan(id),
     contact_id int NOT NULL REFERENCES contact(id),
+    chapter_id int NOT NULL REFERENCES chapter(id),
     CONSTRAINT unx_plan_contact UNIQUE(plan_id, contact_id)
 );
 

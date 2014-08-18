@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import dataxu.intranet.entity.Contact;
 import dataxu.intranet.entity.Plan;
+import dataxu.intranet.entity.PlanContact;
 import dataxu.intranet.repository.ContactRepository;
 import dataxu.intranet.repository.PlanRepository;
 
@@ -68,15 +69,15 @@ public class ContactController {
      */
     @RequestMapping(value = "/api/users/plan/{planId}", method = RequestMethod.GET)
     @ResponseBody
-    public List<Contact> getcontacts(@PathVariable("planId") Integer planId) {
+    public List<Contact> getPlanContacts(@PathVariable("planId") Integer planId) {
         List<Contact> contacts = contactRepository.findAll();
         Plan p = planRepository.findOne(planId);
-        Set<Contact> contactsInPlan = p.getContacts();
+        Set<PlanContact> contactsInPlan = p.getPlanContacts();
 
         for (Iterator<Contact> itr = contacts.iterator(); itr.hasNext();) {
             Contact curr = itr.next();
-            for (Contact c : contactsInPlan) {
-                if (curr.getId() == c.getId()) {
+            for (PlanContact c : contactsInPlan) {
+                if (curr.getId() == c.getContact().getId()) {
                     itr.remove();
                     break;
                 }

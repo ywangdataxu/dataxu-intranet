@@ -11,8 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
@@ -51,9 +50,9 @@ public class Plan {
     @Temporal(TemporalType.DATE)
     private Date endDate;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
-    @JoinTable(name = "plan_contact", joinColumns = { @JoinColumn(name = "plan_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "contact_id", referencedColumnName = "id") })
-    private Set<Contact> contacts;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "plan_id")
+    private Set<PlanContact> planContacts;
 
     @PrePersist
     protected void prePersist() {
@@ -62,12 +61,12 @@ public class Plan {
         this.updatedOn = date;
     }
 
-    public Set<Contact> getContacts() {
-        return contacts;
+    public Set<PlanContact> getPlanContacts() {
+        return planContacts;
     }
 
-    public void setContacts(Set<Contact> contacts) {
-        this.contacts = contacts;
+    public void setPlanContacts(Set<PlanContact> planContacts) {
+        this.planContacts = planContacts;
     }
 
     @PreUpdate
