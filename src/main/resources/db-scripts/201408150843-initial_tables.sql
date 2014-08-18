@@ -14,6 +14,8 @@ CREATE TABLE plan (
     id serial PRIMARY KEY,
     name varchar(255) NOT NULL,
     description text;
+    start_date date NOT NULL,
+    end_date date NOT NULL,
     created_on timestamp NOT NULL DEFAULT current_timestamp,
     updated_on timestamp NOT NULL DEFAULT current_timestamp,
     CONSTRAINT udx_plan_name UNIQUE(name)

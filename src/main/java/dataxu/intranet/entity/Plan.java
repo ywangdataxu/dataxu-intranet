@@ -43,6 +43,14 @@ public class Plan {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedOn;
 
+    @Column(name = "start_date", nullable = false)
+    @Temporal(TemporalType.DATE)
+    private Date startDate;
+
+    @Column(name = "end_date", nullable = false)
+    @Temporal(TemporalType.DATE)
+    private Date endDate;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
     @JoinTable(name = "plan_contact", joinColumns = { @JoinColumn(name = "plan_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "contact_id", referencedColumnName = "id") })
     private Set<Contact> contacts;
@@ -97,5 +105,21 @@ public class Plan {
 
     public Date getUpdatedOn() {
         return updatedOn;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 }
