@@ -87,16 +87,16 @@ public class PlanController {
 
     @RequestMapping(value = "/api/plans/{id}/schedules", method = RequestMethod.GET)
     @ResponseBody
-    public Map<Integer, List<ContactSchedule>> getPlanSchedules(@PathVariable("id") Integer planId) {
+    public Map<PlanContact, List<ContactSchedule>> getPlanSchedules(@PathVariable("id") Integer planId) {
         Plan p = planRepository.findOne(planId);
         Set<PlanContact> contacts = p.getPlanContacts();
 
         Date planStartDate = p.getStartDate();
         Date planEndDate = p.getEndDate();
 
-        Map<Integer, List<ContactSchedule>> schedules = Maps.newHashMap();
+        Map<PlanContact, List<ContactSchedule>> schedules = Maps.newHashMap();
         for (PlanContact c : contacts) {
-            List<ContactSchedule> s = contactScheduleRepository.findByContactId(c.getId());
+            List<ContactSchedule> s = contactScheduleRepository.findByContactId(c.getContact().getId());
             List<ContactSchedule> filtered = Lists.newArrayList();
 
             for (ContactSchedule cs : s) {
@@ -121,7 +121,9 @@ public class PlanController {
                 filtered.add(newSchedule);
             }
             Collections.sort(filtered);
-            schedules.put(c.getId(), filtered);
+
+            c.getChapterId();
+            schedules.put(c, filtered);
         }
 
         return schedules;

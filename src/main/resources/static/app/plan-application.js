@@ -15,6 +15,13 @@ planApp.factory('Plan', ['$resource', function($resource) {
     });
 }]);
 
+planApp.factory('PlanSchedules', ['$resource', function($resource) {
+    return $resource('/api/plans/:id/schedules', {id: '@id'}, {
+        query: {method: 'GET'},
+        update: {method: 'POST', params: {id: '@id'}}
+    });
+}]);
+
 planApp.factory('Users', ['$resource', function($resource) {
     return $resource('/api/users', {}, {
         query: {method: 'GET', isArray: true},
@@ -119,8 +126,9 @@ planApp.controller('PlanDetailController', ['$scope', '$location', '$routeParams
     }
 }]);
 
-planApp.controller('PlanScheduleController', ['$scope', '$location', '$routeParams', 'Plan', 'Users', 'FilterUsers', function($scope, $location, $routeParams, Plan, Users, FilterUsers) {
+planApp.controller('PlanScheduleController', ['$scope', '$location', '$routeParams', 'Plan', 'Users', 'PlanSchedules', function($scope, $location, $routeParams, Plan, Users, PlanSchedules) {
     $scope.plan = Plan.show({id: $routeParams.id});
+    $scope.schedules = PlanSchedules.query({id: $routeParams.id});
 }]);
 
 

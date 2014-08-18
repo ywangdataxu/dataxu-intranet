@@ -113,4 +113,10 @@ public class Contact {
     public Date getUpdatedOn() {
         return updatedOn;
     }
+
+    @Override
+    public String toString() {
+        return "Contact [id=" + id + ", email=" + email + ", firstName=" + firstName + ", lastName=" + lastName
+                + ", createdOn=" + createdOn + ", updatedOn=" + updatedOn + ", velocities=" + velocities + "]";
+    }
 }
