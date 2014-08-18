@@ -53,4 +53,5 @@ public class PlanController {
     public Plan updatePlan(@RequestBody Plan plan) {
         return planRepository.save(plan);
     }
+
 }

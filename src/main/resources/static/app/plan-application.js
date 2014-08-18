@@ -170,6 +170,15 @@ planApp.controller('UserDetailController', ['$scope', '$location', '$routeParams
 planApp.controller('UserScheduleController', ['$scope', '$location', '$routeParams', 'User', 'UserSchedules', function($scope, $location, $routeParams, User, UserSchedules) {
     $scope.user = User.show({id: $routeParams.id});
     $scope.schedules = UserSchedules.query({id: $routeParams.id});
+    var scheduleComparator = function(a, b) {
+        a = new Date(a.start_date);
+        b = new Date(b.start_date);
+        if (a < b) {
+            return -1;
+         } else {
+             return 1;
+         }
+    };
     
     $scope.cancel = function() {
         $location.path('/users/detail/' + $scope.user.id);
@@ -186,6 +195,10 @@ planApp.controller('UserScheduleController', ['$scope', '$location', '$routePara
     
     $scope.addNewSchedule = function() {
         $scope.schedules.push({contact_id: $scope.user.id});
+    }
+    
+    $scope.sortSchedules = function() {
+        $scope.schedules.sort(scheduleComparator);
     }
     
     $scope.updateSchedule = function() {

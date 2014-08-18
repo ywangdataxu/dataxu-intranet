@@ -66,7 +66,7 @@ public class ContactSchedule implements Comparable<ContactSchedule> {
             result = this.startDate.compareTo(o.startDate);
         }
 
-        return result;
+        return -result;
     }
 
     public Date getStartDate() {
