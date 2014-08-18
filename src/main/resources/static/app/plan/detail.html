@@ -1,5 +1,5 @@
 <div>
-    <h1><a href='#/'>Plan List</a> &gt; Plan Detail</h1>
+    <h1><a href='#/'>Plan List</a> &gt; {{plan.name}}</h1>
 
     <form class='form-horizontal'>
         <div class='control-group'>
@@ -88,6 +88,7 @@
             <div class='center buttons'>
                 <a ng-click='cancel()' class='btn btn-small btn-primary'>Cancel</a>
                 <a ng-click='updatePlan()' class='btn btn-small btn-primary'>Update Plan</a>
+                <a ng-click='showSchedule()' class='btn btn-small btn-primary'>Show Schedule</a>
             </div>
         </div>
     </form>

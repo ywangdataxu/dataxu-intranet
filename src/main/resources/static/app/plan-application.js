@@ -113,7 +113,17 @@ planApp.controller('PlanDetailController', ['$scope', '$location', '$routeParams
             document.getElementById('user_id_' + currUser.id).checked = checked;
         }
     }
+    
+    $scope.showSchedule = function() {
+        $location.path('/schedule/' + $scope.plan.id);
+    }
 }]);
+
+planApp.controller('PlanScheduleController', ['$scope', '$location', '$routeParams', 'Plan', 'Users', 'FilterUsers', function($scope, $location, $routeParams, Plan, Users, FilterUsers) {
+    $scope.plan = Plan.show({id: $routeParams.id});
+}]);
+
+
 
 planApp.controller('CreatePlanController', ['$scope', '$location', '$routeParams', 'Plans', function($scope, $location, $routeParams, Plans) {
     $scope.plan = {};
@@ -239,6 +249,9 @@ planApp.config(['$routeProvider', function($routeProvider) {
     }).when('/new', {
         templateUrl: 'app/plan/new.html',
         controller: 'CreatePlanController'
+    }).when('/schedule/:id', {
+        templateUrl: 'app/plan/schedule.html',
+        controller: 'PlanScheduleController'
     }).when('/users', {
         templateUrl: 'app/user/list.html',
         controller: 'UserListController'
