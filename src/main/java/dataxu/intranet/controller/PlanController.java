@@ -43,6 +43,8 @@ public class PlanController {
     @ResponseBody
     public List<Plan> getPlans() {
         List<Plan> plans = planRepository.findAll();
+        Collections.sort(plans);
+
         return plans;
     }
 

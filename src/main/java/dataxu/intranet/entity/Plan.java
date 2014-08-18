@@ -21,7 +21,7 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "plan")
-public class Plan {
+public class Plan implements Comparable<Plan> {
     @Id
     @SequenceGenerator(name = "plan_seq", sequenceName = "plan_id_seq")
     @GeneratedValue(generator = "plan_seq", strategy = GenerationType.IDENTITY)
@@ -120,5 +120,10 @@ public class Plan {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    @Override
+    public int compareTo(Plan o) {
+        return this.startDate.compareTo(o.startDate);
     }
 }
