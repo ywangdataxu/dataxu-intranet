@@ -2,7 +2,6 @@ package dataxu.intranet.controller;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -72,7 +71,7 @@ public class ContactController {
     public List<Contact> getPlanContacts(@PathVariable("planId") Integer planId) {
         List<Contact> contacts = contactRepository.findAll();
         Plan p = planRepository.findOne(planId);
-        Set<PlanContact> contactsInPlan = p.getPlanContacts();
+        List<PlanContact> contactsInPlan = p.getPlanContacts();
 
         for (Iterator<Contact> itr = contacts.iterator(); itr.hasNext();) {
             Contact curr = itr.next();

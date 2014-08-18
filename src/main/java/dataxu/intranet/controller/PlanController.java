@@ -1,5 +1,7 @@
 package dataxu.intranet.controller;
 
+import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -16,8 +18,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 import dataxu.intranet.entity.ContactSchedule;
+import dataxu.intranet.entity.ContactVelocity;
 import dataxu.intranet.entity.Plan;
 import dataxu.intranet.entity.PlanContact;
 import dataxu.intranet.repository.ContactScheduleRepository;
@@ -85,16 +89,53 @@ public class PlanController {
         return planRepository.save(plan);
     }
 
+    public static class PlanSchedule {
+        private final Date date;
+        private final Double velocity;
+
+        public PlanSchedule(Date date, Double velocity) {
+            this.date = date;
+            this.velocity = velocity;
+        }
+
+        public Date getDate() {
+            return date;
+        }
+
+        public Double getVelocity() {
+            return velocity;
+        }
+    }
+
+    public static class ChapterSchedule {
+        private final Integer chapterId;
+        private final List<PlanSchedule> planSchedules;
+
+        public ChapterSchedule(Integer chapterId, List<PlanSchedule> planSchedules) {
+            this.chapterId = chapterId;
+            this.planSchedules = planSchedules;
+        }
+
+        public Integer getChapterId() {
+            return chapterId;
+        }
+
+        public List<PlanSchedule> getPlanSchedules() {
+            return planSchedules;
+        }
+
+    }
+
     @RequestMapping(value = "/api/plans/{id}/schedules", method = RequestMethod.GET)
     @ResponseBody
-    public Map<PlanContact, List<ContactSchedule>> getPlanSchedules(@PathVariable("id") Integer planId) {
+    public List<ChapterSchedule> getPlanSchedules(@PathVariable("id") Integer planId) {
         Plan p = planRepository.findOne(planId);
-        Set<PlanContact> contacts = p.getPlanContacts();
+        List<PlanContact> contacts = p.getPlanContacts();
 
         Date planStartDate = p.getStartDate();
         Date planEndDate = p.getEndDate();
 
-        Map<PlanContact, List<ContactSchedule>> schedules = Maps.newHashMap();
+        Map<Integer, Map<Date, Double>> schedules = Maps.newHashMap();
         for (PlanContact c : contacts) {
             List<ContactSchedule> s = contactScheduleRepository.findByContactId(c.getContact().getId());
             List<ContactSchedule> filtered = Lists.newArrayList();
@@ -122,11 +163,114 @@ public class PlanController {
             }
             Collections.sort(filtered);
 
-            c.getChapterId();
-            schedules.put(c, filtered);
+            Integer chapterId = c.getChapterId();
+            Integer velocity = 0;
+            List<ContactVelocity> velocities = c.getContact().getVelocities();
+            for (ContactVelocity v : velocities) {
+                if (v.getChapter().getId() == chapterId) {
+                    velocity = v.getVelocity();
+                }
+            }
+            Map<Date, Double> currAccumulatedVelocity = getAccumulatedVelocity(velocity / 10.0, filtered,
+                    planStartDate, planEndDate);
+            if (schedules.containsKey(chapterId)) {
+                Map<Date, Double> existing = schedules.get(chapterId);
+                Map<Date, Double> newOne = Maps.newTreeMap();
+
+                // merge
+                for (Date d : existing.keySet()) {
+                    newOne.put(d, existing.get(d) + currAccumulatedVelocity.get(d));
+                }
+                schedules.put(chapterId, newOne);
+            } else {
+                schedules.put(chapterId, currAccumulatedVelocity);
+            }
         }
 
-        return schedules;
+        List<ChapterSchedule> result = Lists.newArrayList();
+        for (Integer i : schedules.keySet()) {
+            List<PlanSchedule> ps = Lists.newArrayList();
+
+            for (Date d : schedules.get(i).keySet()) {
+                ps.add(new PlanSchedule(d, schedules.get(i).get(d)));
+            }
+
+            result.add(new ChapterSchedule(i, ps));
+        }
+
+        return result;
     }
 
+    private static Map<Date, Double> getAccumulatedVelocity(double velocity, List<ContactSchedule> schedules,
+            Date startDate, Date endDate) {
+        Set<Date> workingDays = getWorkingDays(schedules, startDate, endDate);
+        Set<Date> all = getDaysInWeeks(startDate, endDate);
+
+        Map<Date, Double> result = Maps.newTreeMap();
+
+        double accumulated = 0;
+        for (Date a : all) {
+            if (workingDays.contains(a)) {
+                accumulated += velocity;
+            }
+            result.put(a, accumulated);
+        }
+
+        return result;
+    }
+
+    private static Set<Date> getWorkingDays(List<ContactSchedule> schedules, Date startDate, Date endDate) {
+        Collections.sort(schedules);
+
+        Set<Date> allDays = getDaysInWeeks(startDate, endDate);
+
+        for (ContactSchedule schedule : schedules) {
+            Set<Date> nonWorkingDays = getDaysInWeeks(schedule.getStartDate(), schedule.getEndDate());
+
+            for (Date d : nonWorkingDays) {
+                allDays.remove(d);
+            }
+        }
+
+        return allDays;
+    }
+
+    public static void main(String[] args) throws ParseException {
+        // FastDateFormat format = FastDateFormat.getInstance("MM/dd/yyyy");
+        //
+        // Date start = format.parse("08/18/2014");
+        // Date end = format.parse("08/26/2014");
+        //
+        // ContactSchedule cs = new ContactSchedule();
+        // cs.setStartDate(format.parse("08/19/2014"));
+        // cs.setEndDate(format.parse("08/20/2014"));
+        //
+        // List<ContactSchedule> schedules = Lists.newArrayList(cs);
+        //
+        // List<Double> result = getAccumulatedVelocity(0.6, schedules, start,
+        // end);
+        //
+        // for (Double d : result) {
+        // System.out.println(d);
+        // }
+    }
+
+    private static Set<Date> getDaysInWeeks(Date startDate, Date endDate) {
+        Calendar start = Calendar.getInstance();
+        start.setTime(startDate);
+
+        Calendar end = Calendar.getInstance();
+        end.setTime(endDate);
+
+        Set<Date> result = Sets.newTreeSet();
+        for (Calendar s = start; !start.after(end);) {
+            int currDate = s.get(Calendar.DAY_OF_WEEK);
+            if (currDate >= 2 && currDate <= 6) {
+                result.add(new Date(s.getTime().getTime()));
+            }
+            s.add(Calendar.DATE, 1);
+        }
+
+        return result;
+    }
 }

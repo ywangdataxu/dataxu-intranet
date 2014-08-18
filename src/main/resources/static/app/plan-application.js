@@ -17,7 +17,7 @@ planApp.factory('Plan', ['$resource', function($resource) {
 
 planApp.factory('PlanSchedules', ['$resource', function($resource) {
     return $resource('/api/plans/:id/schedules', {id: '@id'}, {
-        query: {method: 'GET'},
+        query: {method: 'GET', isArray: true},
         update: {method: 'POST', params: {id: '@id'}}
     });
 }]);
@@ -275,6 +275,10 @@ planApp.config(['$routeProvider', function($routeProvider) {
     }).when('/users/schedule/:id', {
         templateUrl: 'app/user/schedule.html',
         controller: 'UserScheduleController'
+    }).when('/line', {
+        templateUrl: 'app/plan/line.html'
+    }).when('/bar', {
+        templateUrl: 'app/plan/bar.html'
     });
 }]);
 

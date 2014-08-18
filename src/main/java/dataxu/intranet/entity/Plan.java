@@ -1,6 +1,8 @@
 package dataxu.intranet.entity;
 
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -18,6 +20,8 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import com.google.common.collect.Lists;
 
 @Entity
 @Table(name = "plan")
@@ -61,8 +65,10 @@ public class Plan implements Comparable<Plan> {
         this.updatedOn = date;
     }
 
-    public Set<PlanContact> getPlanContacts() {
-        return planContacts;
+    public List<PlanContact> getPlanContacts() {
+        List<PlanContact> contacts = Lists.newArrayList(planContacts);
+        Collections.sort(contacts);
+        return contacts;
     }
 
     public void setPlanContacts(Set<PlanContact> planContacts) {

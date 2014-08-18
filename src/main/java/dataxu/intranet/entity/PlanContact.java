@@ -14,7 +14,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "plan_contact")
-public class PlanContact {
+public class PlanContact implements Comparable<PlanContact> {
     @Id
     @SequenceGenerator(name = "plan_contact_seq", sequenceName = "plan_contact_id_seq")
     @GeneratedValue(generator = "plan_contact_seq", strategy = GenerationType.IDENTITY)
@@ -67,5 +67,15 @@ public class PlanContact {
     public String toString() {
         return "PlanContact [id=" + id + ", planId=" + planId + ", contact=" + contact + ", chapterId=" + chapterId
                 + "]";
+    }
+
+    @Override
+    public int compareTo(PlanContact o) {
+        int result = this.contact.getFirstName().compareTo(o.contact.getFirstName());
+        if (result == 0) {
+            result = this.contact.getLastName().compareTo(o.contact.getLastName());
+        }
+
+        return result;
     }
 }
