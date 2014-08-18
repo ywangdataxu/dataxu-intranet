@@ -42,6 +42,13 @@ planApp.factory('Chapters', ['$resource', function($resource) {
     });
 }]);
 
+planApp.factory('UserSchedules', ['$resource', function($resource) {
+    return $resource('/api/users/:id/schedules', {id: '@id'}, {
+        query: {method: 'GET', isArray: true},
+        update: {method: 'POST', params: {id: '@id'}}
+    });
+}]);
+
 
 planApp.controller('PlanListController', ['$scope', '$location', 'Plans', function($scope, $location, Plans) {
     $scope.plans = Plans.query(); 
@@ -128,6 +135,10 @@ planApp.controller('UserListController', ['$scope', '$location', 'Users', functi
         $location.path('/users/detail/' + userId);
     }
     
+    $scope.editUserSchedule = function(userId) {
+        $location.path('/users/schedule/' + userId);
+    }
+    
     $scope.deleteUser = function(userId) {
         Users.delete({id: userId});
         $scope.users = Users.query();
@@ -150,8 +161,38 @@ planApp.controller('UserDetailController', ['$scope', '$location', '$routeParams
         User.update($scope.user);
         $location.path('/users/list');
     }
+    
+    $scope.editUserSchedule = function() {
+        $location.path('/users/schedule/' + $scope.user.id);
+    }
 }]);
 
+planApp.controller('UserScheduleController', ['$scope', '$location', '$routeParams', 'User', 'UserSchedules', function($scope, $location, $routeParams, User, UserSchedules) {
+    $scope.user = User.show({id: $routeParams.id});
+    $scope.schedules = UserSchedules.query({id: $routeParams.id});
+    
+    $scope.cancel = function() {
+        $location.path('/users/detail/' + $scope.user.id);
+    }
+    
+    $scope.deleteSchedule = function(scheduleId) {
+        for (var i = 0; i < $scope.schedules.length; i++) {
+            if (scheduleId == $scope.schedules[i].id) {
+                $scope.schedules.splice(i, 1);
+                break;
+            }
+        }
+    }
+    
+    $scope.addNewSchedule = function() {
+        $scope.schedules.push({contact_id: $scope.user.id});
+    }
+    
+    $scope.updateSchedule = function() {
+        UserSchedules.update({id: $scope.user.id}, $scope.schedules);
+        $location.path('/users/detail/' + $scope.user.id);
+    }
+}]);
 planApp.controller('CreateUserController', ['$scope', '$location', '$routeParams', 'Users', 'Chapters', function($scope, $location, $routeParams, Users, Chapters) {
     // I know it is stupid.
     $scope.user = {velocities: [{chapter: {name: 'LS', id: 1}, velocity: 0},
@@ -196,6 +237,9 @@ planApp.config(['$routeProvider', function($routeProvider) {
     }).when('/users/detail/:id', {
         templateUrl: 'app/user/detail.html',
         controller: 'UserDetailController'
+    }).when('/users/schedule/:id', {
+        templateUrl: 'app/user/schedule.html',
+        controller: 'UserScheduleController'
     });
 }]);
 

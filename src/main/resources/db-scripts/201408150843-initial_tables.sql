@@ -42,4 +42,13 @@ CREATE TABLE plan_contact (
     CONSTRAINT unx_plan_contact UNIQUE(plan_id, contact_id)
 );
 
+CREATE TABLE contact_schedule (
+    id serial PRIMARY KEY,
+    contact_id int NOT NULL REFERENCES contact(id),
+    start_date date NOT NULL,
+    end_date date NOT NULL,
+    reason varchar(255) NOT NULL,
+    CONSTRAINT unx_contact_dates UNIQUE(contact_id, start_date, end_date)
+);
+
 END;

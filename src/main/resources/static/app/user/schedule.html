@@ -1,0 +1,34 @@
+<div>
+    <h1>
+        <a href='#/users/list'>User List</a> &gt; <a href='#/users/detail/{{user.id}}'>{{user.first_name}}
+            {{user.last_name}}</a> &gt; Schedule
+    </h1>
+
+    <table style='width:100%'>
+         <thead>
+        <tr>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Reason</th>
+            <th width='10px'></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat='schedule in schedules'>
+            <td><input type="text" class="form-control" datepicker-popup="MM/dd/yyyy" ng-model="schedule.start_date" ng-required="true" close-text="Close" /></td>
+            <td><input type="text" class="form-control" datepicker-popup="MM/dd/yyyy" ng-model="schedule.end_date" ng-required="true" close-text="Close" /></td>
+            <td><input ng-model='schedule.reason' style='width: 100%'></input></td>
+            <td><a ng-click='deleteSchedule(schedule.id)' class='btn btn-small btn-danger'>delete</a></td>
+        </tr>
+        </tbody>
+    </table>
+    <div class='control-group'>
+        <a ng-click='addNewSchedule()' class='btn btn-small btn-default'>Add New</a>
+    </div>
+    <div class='control-group'>
+        <div class='center buttons'>
+            <a ng-click='cancel()' class='btn btn-small btn-primary'>Cancel</a>
+            <a ng-click='updateSchedule()' class='btn btn-small btn-primary'>Update Schedule</a>
+        </div>
+    </div>
+</div>
