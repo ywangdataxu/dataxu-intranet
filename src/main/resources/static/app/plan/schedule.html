@@ -11,8 +11,8 @@
         <table style='width: 80%'>
             <thead>
                 <tr>
-                    <th>Email</th>
                     <th>Name</th>
+                    <th>Email</th>
                     <th colspan='4' style='text-align: center'>Chapter Velocities</th>
                 </tr>
                 <tr>
@@ -31,18 +31,18 @@
                     <td>{{user.contact.email}}</td>
                     <td nowrap>
                         <input type='radio' ng-change='updateSchedule()' name='contact_chapter_{{user.contact.id}}' value='1' ng-model='user.chapter_id' data-ng-disabled='user.contact.velocities[0].velocity == 0'>
-                        <label>LS {{user.contact.velocities[0].velocity}}</label>
+                        <label>{{user.contact.velocities[0].velocity}}</label>
                     </td>
                     <td nowrap>
                         <input type='radio' ng-change='updateSchedule()' name='contact_chapter_{{user.contact.id}}' value='2' ng-model='user.chapter_id' data-ng-disabled='user.contact.velocities[1].velocity == 0'>
-                        <label>RTS {{user.contact.velocities[1].velocity}}</label>
+                        <label>{{user.contact.velocities[1].velocity}}</label>
                     </td>
                     <td nowrap>
                         <input type='radio' ng-change='updateSchedule()' name='contact_chapter_{{user.contact.id}}' value='3' ng-model='user.chapter_id' data-ng-disabled='user.contact.velocities[2].velocity == 0'>
-                        <label>RWH {{user.contact.velocities[2].velocity}}</label></td>
+                        <label>{{user.contact.velocities[2].velocity}}</label></td>
                     <td nowrap>
                         <input type='radio' ng-change='updateSchedule()' name='contact_chapter_{{user.contact.id}}' value='4' ng-model='user.chapter_id' data-ng-disabled='user.contact.velocities[3].velocity == 0'>
-                        <label>UI {{user.contact.velocities[3].velocity}}</label></td>
+                        <label>{{user.contact.velocities[3].velocity}}</label></td>
                 </tr>
             </tbody>
         </table>
