@@ -1,6 +1,5 @@
 package dataxu.intranet.controller;
 
-import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -91,11 +90,23 @@ public class PlanController {
     }
 
     public static class PlanSchedule {
-        private final Date date;
-        private final Double velocity;
+        private Date date;
+        private Double velocity;
 
         public PlanSchedule(Date date, Double velocity) {
             this.date = date;
+            this.velocity = velocity;
+        }
+
+        public PlanSchedule() {
+
+        }
+
+        public void setDate(Date date) {
+            this.date = date;
+        }
+
+        public void setVelocity(Double velocity) {
             this.velocity = velocity;
         }
 
@@ -258,7 +269,9 @@ public class PlanController {
             List<Double> data = Lists.newArrayList();
             boolean allZeros = true;
 
-            for (PlanSchedule ps : c.getPlanSchedules()) {
+            List<PlanSchedule> weekly = groupByWeek(c.getPlanSchedules());
+            // by week
+            for (PlanSchedule ps : weekly) {
                 double v = ps.getVelocity();
                 data.add(v / 10);
 
@@ -280,6 +293,42 @@ public class PlanController {
         }
 
         return new ScheduleChartDataSet(dates, dataList);
+    }
+
+    private static List<PlanSchedule> groupByWeek(List<PlanSchedule> src) {
+        Date currDate = null;
+        PlanSchedule currSchedule = null;
+        List<PlanSchedule> result = Lists.newArrayList();
+        for (PlanSchedule ps : src) {
+            if (currDate == null) {
+                currDate = getMonday(ps.getDate());
+                currSchedule = new PlanSchedule(currDate, ps.getVelocity());
+                result.add(currSchedule);
+            } else {
+                Date monday = getMonday(ps.getDate());
+                if (monday.equals(currDate)) {
+                    currSchedule.setVelocity(currSchedule.getVelocity() + ps.getVelocity());
+                } else {
+                    currDate = getMonday(ps.getDate());
+                    currSchedule = new PlanSchedule(currDate, ps.getVelocity());
+                    result.add(currSchedule);
+                }
+            }
+        }
+        return result;
+    }
+
+    private static Date getMonday(Date src) {
+        System.out.println(src);
+        Calendar srcDate = Calendar.getInstance();
+        srcDate.setTime(src);
+        srcDate.set(Calendar.DAY_OF_WEEK, 2);
+
+        return srcDate.getTime();
+    }
+
+    public static void main(String args[]) {
+        System.out.println(getMonday(new Date()));
     }
 
     private static Map<Date, Double> getAccumulatedVelocity(double velocity, List<ContactSchedule> schedules,
@@ -316,27 +365,7 @@ public class PlanController {
         return allDays;
     }
 
-    private static final FastDateFormat FORMAT = FastDateFormat.getInstance("MM/dd/yyyy");
-
-    public static void main(String[] args) throws ParseException {
-        // FastDateFormat format = FastDateFormat.getInstance("MM/dd/yyyy");
-        //
-        // Date start = format.parse("08/18/2014");
-        // Date end = format.parse("08/26/2014");
-        //
-        // ContactSchedule cs = new ContactSchedule();
-        // cs.setStartDate(format.parse("08/19/2014"));
-        // cs.setEndDate(format.parse("08/20/2014"));
-        //
-        // List<ContactSchedule> schedules = Lists.newArrayList(cs);
-        //
-        // List<Double> result = getAccumulatedVelocity(0.6, schedules, start,
-        // end);
-        //
-        // for (Double d : result) {
-        // System.out.println(d);
-        // }
-    }
+    private static final FastDateFormat FORMAT = FastDateFormat.getInstance("MM/dd");
 
     private static Set<Date> getDaysInWeeks(Date startDate, Date endDate) {
         Calendar start = Calendar.getInstance();
