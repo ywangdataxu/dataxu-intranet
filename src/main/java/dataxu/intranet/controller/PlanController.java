@@ -201,15 +201,15 @@ public class PlanController {
             Collections.sort(filtered);
 
             Integer chapterId = c.getChapterId();
-            Integer velocity = 0;
+            Double velocity = 0D;
             List<ContactVelocity> velocities = c.getContact().getVelocities();
             for (ContactVelocity v : velocities) {
                 if (v.getChapter().getId() == chapterId) {
                     velocity = v.getVelocity();
                 }
             }
-            Map<Date, Double> currAccumulatedVelocity = getAccumulatedVelocity(velocity / 10.0, filtered,
-                    planStartDate, planEndDate);
+            Map<Date, Double> currAccumulatedVelocity = getAccumulatedVelocity(velocity, filtered, planStartDate,
+                    planEndDate);
             if (schedules.containsKey(chapterId)) {
                 Map<Date, Double> existing = schedules.get(chapterId);
                 Map<Date, Double> newOne = Maps.newTreeMap();
@@ -260,7 +260,7 @@ public class PlanController {
 
             for (PlanSchedule ps : c.getPlanSchedules()) {
                 double v = ps.getVelocity();
-                data.add(v);
+                data.add(v / 10);
 
                 if (v != 0) {
                     allZeros = false;
@@ -271,10 +271,11 @@ public class PlanController {
                 }
             }
 
-            ScheduleChartData resultData = new ScheduleChartData(chapterName, data);
-            chapterNames.add(chapterName);
-            dataList.add(resultData);
-
+            if (!allZeros) {
+                ScheduleChartData resultData = new ScheduleChartData(chapterName, data);
+                chapterNames.add(chapterName);
+                dataList.add(resultData);
+            }
             count++;
         }
 

@@ -32,7 +32,7 @@ public class ContactVelocity implements Comparable<ContactVelocity> {
     private Chapter chapter;
 
     @Column(name = "velocity")
-    private Integer velocity;
+    private Double velocity;
 
     public Integer getId() {
         return id;
@@ -58,11 +58,11 @@ public class ContactVelocity implements Comparable<ContactVelocity> {
         this.chapter = chapter;
     }
 
-    public Integer getVelocity() {
+    public Double getVelocity() {
         return velocity;
     }
 
-    public void setVelocity(Integer velocity) {
+    public void setVelocity(Double velocity) {
         this.velocity = velocity;
     }
 

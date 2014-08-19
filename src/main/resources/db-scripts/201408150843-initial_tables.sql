@@ -31,7 +31,7 @@ CREATE TABLE contact_velocity (
     id serial PRIMARY KEY,
     contact_id int NOT NULL REFERENCES contact(id),
     chapter_id int NOT NULL REFERENCES chapter(id),
-    velocity int NOT NULL,
+    velocity decimal NOT NULL,
     CONSTRAINT unx_contact_chapter UNIQUE(contact_id, chapter_id)
 );
 
