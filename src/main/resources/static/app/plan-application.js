@@ -129,13 +129,17 @@ planApp.controller('PlanDetailController', ['$scope', '$location', '$routeParams
 }]);
 
 planApp.controller('PlanScheduleController', ['$scope', '$location', '$routeParams', 'Plan', 'Users', 'PlanSchedules', function($scope, $location, $routeParams, Plan, Users, PlanSchedules) {
+    $scope.chartWidth = 1200;
+    $scope.chartHeight = 300;
     $scope.plan = Plan.show({id: $routeParams.id});
     $scope.myChart;
     $scope.legend = [];
     $scope.data = {};
     $scope.chapter = ['LS', 'RTS', 'RWH', 'UI'];
-    $scope.showDetails = true;
-    $scope.detailToggleText = 'Hide Plan Details';
+    $scope.showDetails = false;
+    $scope.detailToggleText = 'Show Plan Details';
+    $scope.showChartSettings = false;
+
     
     var colors = ["orange", "green", "grey", "red", "pink", "black", "yello", "purple"];
     var ctx = document.getElementById("myChart").getContext("2d");
@@ -163,8 +167,8 @@ planApp.controller('PlanScheduleController', ['$scope', '$location', '$routePara
                     datasets: dataSet
             };
            
-            ctx.canvas.width = 1200;
-            ctx.canvas.height = 300;
+            ctx.canvas.width = $scope.chartWidth;
+            ctx.canvas.height = $scope.chartHeight;
             $scope.myChart = new Chart(ctx).Bar($scope.data);
         });
     }
@@ -178,6 +182,17 @@ planApp.controller('PlanScheduleController', ['$scope', '$location', '$routePara
         } else {
             $scope.detailToggleText = 'Show Plan Details';
         }
+    }
+    
+    $scope.toggleChartSettings = function() {
+        $scope.showChartSettings = !$scope.showChartSettings;
+    }
+    
+    $scope.updateChart = function() {
+        $scope.chartWidth = $('#chartWidth').val();
+        $scope.chartHeight = $('#chartHeight').val();
+        $scope.showChartSettings = false;
+        $scope.updateSchedule();
     }
 }]);
 
