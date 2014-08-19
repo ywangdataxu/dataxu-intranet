@@ -13,3 +13,10 @@ td a {
     cursor: pointer;
     cursor: hand;
 }
+
+body {
+    background-image: url('/content/images/dx-logo.png');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: 70px 0px;
+}
