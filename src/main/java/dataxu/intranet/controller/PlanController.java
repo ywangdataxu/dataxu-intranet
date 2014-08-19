@@ -128,9 +128,9 @@ public class PlanController {
 
     public static class ScheduleChartData {
         private final String chapterName;
-        private final List<Integer> data;
+        private final List<Double> data;
 
-        public ScheduleChartData(String chapterName, List<Integer> data) {
+        public ScheduleChartData(String chapterName, List<Double> data) {
             this.data = data;
             this.chapterName = chapterName;
         }
@@ -139,7 +139,7 @@ public class PlanController {
             return chapterName;
         }
 
-        public List<Integer> getData() {
+        public List<Double> getData() {
             return data;
         }
     }
@@ -255,11 +255,11 @@ public class PlanController {
         for (ChapterSchedule c : schedules) {
             String chapterName = chapterMap.get(c.getChapterId());
 
-            List<Integer> data = Lists.newArrayList();
+            List<Double> data = Lists.newArrayList();
             boolean allZeros = true;
 
             for (PlanSchedule ps : c.getPlanSchedules()) {
-                int v = ps.getVelocity().intValue();
+                double v = ps.getVelocity();
                 data.add(v);
 
                 if (v != 0) {
