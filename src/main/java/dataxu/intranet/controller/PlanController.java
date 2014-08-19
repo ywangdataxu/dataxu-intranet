@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.time.FastDateFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -123,12 +124,48 @@ public class PlanController {
         public List<PlanSchedule> getPlanSchedules() {
             return planSchedules;
         }
+    }
+
+    public static class ScheduleChartData {
+        private final String chapterName;
+        private final List<Integer> data;
+
+        public ScheduleChartData(String chapterName, List<Integer> data) {
+            this.data = data;
+            this.chapterName = chapterName;
+        }
+
+        public String getChapterName() {
+            return chapterName;
+        }
+
+        public List<Integer> getData() {
+            return data;
+        }
+    }
+
+    public static class ScheduleChartDataSet {
+        private final List<String> dates;
+        private final List<ScheduleChartData> dataSet;
+
+        public ScheduleChartDataSet(List<String> dates, List<ScheduleChartData> dataSet) {
+            this.dates = dates;
+            this.dataSet = dataSet;
+        }
+
+        public List<String> getDates() {
+            return dates;
+        }
+
+        public List<ScheduleChartData> getDataSet() {
+            return dataSet;
+        }
 
     }
 
     @RequestMapping(value = "/api/plans/{id}/schedules", method = RequestMethod.GET)
     @ResponseBody
-    public List<ChapterSchedule> getPlanSchedules(@PathVariable("id") Integer planId) {
+    public ScheduleChartDataSet getPlanSchedules(@PathVariable("id") Integer planId) {
         Plan p = planRepository.findOne(planId);
         List<PlanContact> contacts = p.getPlanContacts();
 
@@ -198,7 +235,50 @@ public class PlanController {
             result.add(new ChapterSchedule(i, ps));
         }
 
-        return result;
+        return convert(result);
+    }
+
+    public ScheduleChartDataSet convert(List<ChapterSchedule> schedules) {
+        List<String> chapterNames = Lists.newArrayList();
+
+        Map<Integer, String> chapterMap = Maps.newHashMap();
+        chapterMap.put(1, "LS");
+        chapterMap.put(2, "RTS");
+        chapterMap.put(3, "RWH");
+        chapterMap.put(4, "UI");
+
+        List<String> dates = Lists.newArrayList();
+        int count = 0;
+
+        List<ScheduleChartData> dataList = Lists.newArrayList();
+
+        for (ChapterSchedule c : schedules) {
+            String chapterName = chapterMap.get(c.getChapterId());
+
+            List<Integer> data = Lists.newArrayList();
+            boolean allZeros = true;
+
+            for (PlanSchedule ps : c.getPlanSchedules()) {
+                int v = ps.getVelocity().intValue();
+                data.add(v);
+
+                if (v != 0) {
+                    allZeros = false;
+                }
+
+                if (count == 0) {
+                    dates.add(FORMAT.format(ps.getDate()));
+                }
+            }
+
+            ScheduleChartData resultData = new ScheduleChartData(chapterName, data);
+            chapterNames.add(chapterName);
+            dataList.add(resultData);
+
+            count++;
+        }
+
+        return new ScheduleChartDataSet(dates, dataList);
     }
 
     private static Map<Date, Double> getAccumulatedVelocity(double velocity, List<ContactSchedule> schedules,
@@ -234,6 +314,8 @@ public class PlanController {
 
         return allDays;
     }
+
+    private static final FastDateFormat FORMAT = FastDateFormat.getInstance("MM/dd/yyyy");
 
     public static void main(String[] args) throws ParseException {
         // FastDateFormat format = FastDateFormat.getInstance("MM/dd/yyyy");

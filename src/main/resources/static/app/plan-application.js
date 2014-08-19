@@ -16,10 +16,7 @@ planApp.factory('Plan', ['$resource', function($resource) {
 }]);
 
 planApp.factory('PlanSchedules', ['$resource', function($resource) {
-    return $resource('/api/plans/:id/schedules', {id: '@id'}, {
-        query: {method: 'GET', isArray: true},
-        update: {method: 'POST', params: {id: '@id'}}
-    });
+    return $resource('/api/plans/:id/schedules', {id: '@id'});
 }]);
 
 planApp.factory('Users', ['$resource', function($resource) {
@@ -128,30 +125,49 @@ planApp.controller('PlanDetailController', ['$scope', '$location', '$routeParams
 
 planApp.controller('PlanScheduleController', ['$scope', '$location', '$routeParams', 'Plan', 'Users', 'PlanSchedules', function($scope, $location, $routeParams, Plan, Users, PlanSchedules) {
     $scope.plan = Plan.show({id: $routeParams.id});
-    $scope.schedules = PlanSchedules.query({id: $routeParams.id});
+    $scope.myChart = {};
+    
+    var colors = ["orange", "green", "grey", "red", "pink", "black", "yello", "purple"];
+    $scope.schedules = PlanSchedules.get({id: $routeParams.id}, function() {
+        var dataSet = [];
+        for (var i = 0; i < $scope.schedules.data_set.length; i++) { 
+            dataSet.push({
+                    fillColor: colors[i % colors.length],
+                    data: $scope.schedules.data_set[i].data
+            });
+        }
+        var data = {
+                labels: $scope.schedules.dates,
+                datasets: dataSet
+        };
+        
+        $scope.myChart = {"data": data, "options": {} };
+    });
+    
 
     
-    var data = {
-            labels : ["January","February","March","April","May","June","July"],
-            datasets : [
-              {
-                fillColor : "rgba(220,220,220,0.5)",
-                strokeColor : "rgba(220,220,220,1)",
-                pointColor : "rgba(220,220,220,1)",
-                pointStrokeColor : "#fff",
-                data : [65,59,90,81,56,55,40]
-              },
-              {
-                fillColor : "rgba(151,187,205,0.5)",
-                strokeColor : "rgba(151,187,205,1)",
-                pointColor : "rgba(151,187,205,1)",
-                pointStrokeColor : "#fff",
-                data : [28,48,40,19,96,27,100]
-              }
-            ]
-          }
-
-    $scope.myChart = {"data": data, "options": {} };
+    
+//    var data = {
+//            labels : ["January","February","March","April","May","June","July"],
+//            datasets : [
+//              {
+//                fillColor : "rgba(220,220,220,0.5)",
+//                strokeColor : "rgba(220,220,220,1)",
+//                pointColor : "rgba(220,220,220,1)",
+//                pointStrokeColor : "#fff",
+//                data : [65,59,90,81,56,55,40]
+//              },
+//              {
+//                fillColor : "rgba(151,187,205,0.5)",
+//                strokeColor : "rgba(151,187,205,1)",
+//                pointColor : "rgba(151,187,205,1)",
+//                pointStrokeColor : "#fff",
+//                data : [28,48,40,19,96,27,100]
+//              }
+//            ]
+//          }
+//
+//    $scope.myChart = {"data": data, "options": {} };
 }]);
 
 
