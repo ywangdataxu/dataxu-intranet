@@ -134,25 +134,35 @@ planApp.controller('PlanScheduleController', ['$scope', '$location', '$routePara
     $scope.legend = [];
     
     var colors = ["orange", "green", "grey", "red", "pink", "black", "yello", "purple"];
-    $scope.schedules = PlanSchedules.get({id: $routeParams.id}, function() {
-        var dataSet = [];
-        for (var i = 0; i < $scope.schedules.data_set.length; i++) {
-            $scope.legend.push({name: $scope.schedules.data_set[i].chapter_name, color: colors[i % colors.length]});
-            dataSet.push({
-                    fillColor: colors[i % colors.length],
-                    data: $scope.schedules.data_set[i].data
-            });
-        }
-        var data = {
-                labels: $scope.schedules.dates,
-                datasets: dataSet
-        };
-        
-        $scope.myChart = {"data": data, "options": {} };
-    });
+    
+    $scope.updateSchedule = function() {
+        Plan.update($scope.plan, function() {
+            $scope.updateScheduleChart();
+        });
+    }
+    
+    $scope.updateScheduleChart = function() {
+        $scope.schedules = PlanSchedules.get({id: $routeParams.id}, function() {
+            $scope.legend = [];
+            var dataSet = [];
+            for (var i = 0; i < $scope.schedules.data_set.length; i++) {
+                $scope.legend.push({name: $scope.schedules.data_set[i].chapter_name, color: colors[i % colors.length]});
+                dataSet.push({
+                        fillColor: colors[i % colors.length],
+                        data: $scope.schedules.data_set[i].data
+                });
+            }
+            var data = {
+                    labels: $scope.schedules.dates,
+                    datasets: dataSet
+            };
+            
+            $scope.myChart = {"data": data, "options": {} };
+        });
+    }
+    
+    $scope.updateScheduleChart();
 }]);
-
-
 
 planApp.controller('CreatePlanController', ['$scope', '$location', '$routeParams', 'Plans', function($scope, $location, $routeParams, Plans) {
     $scope.plan = {};
