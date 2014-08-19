@@ -86,10 +86,21 @@
                             <a href='#/users/detail/{{user.id}}'>{{user.first_name}} {{user.last_name}}</a>
                         </td>
                         <td>{{user.email}}</td>
-                        <td nowrap><input type='radio' name='contact_chapter_{{user.id}}' value='1' data-ng-disabled='user.contact.velocities[0].velocity == 0'><label>{{user.velocities[0].velocity}}</label></td>
-                        <td nowrap><input type='radio' name='contact_chapter_{{user.id}}' value='2' data-ng-disabled='user.contact.velocities[1].velocity == 0'><label>{{user.velocities[1].velocity}}</label></td>
-                        <td nowrap><input type='radio' name='contact_chapter_{{user.id}}' value='3' data-ng-disabled='user.contact.velocities[2].velocity == 0'><label>{{user.velocities[2].velocity}}</label></td>
-                        <td nowrap><input type='radio' name='contact_chapter_{{user.id}}' value='4' data-ng-disabled='user.contact.velocities[3].velocity == 0'><label>{{user.velocities[3].velocity}}</label></td>
+                        <td nowrap>
+                            <input type='radio' name='contact_chapter_{{user.id}}' value='1' data-ng-disabled='user.velocities[0].velocity == 0'>
+                            <label>{{user.velocities[0].velocity}}</label>
+                        </td>
+                        <td nowrap>
+                            <input type='radio' name='contact_chapter_{{user.id}}' value='2' data-ng-disabled='user.velocities[1].velocity == 1'>
+                            <label>{{user.velocities[1].velocity}}</label>
+                        </td>
+                        <td nowrap>
+                            <input type='radio' name='contact_chapter_{{user.id}}' value='3' data-ng-disabled='user.velocities[2].velocity == 0'>
+                            <label>{{user.velocities[2].velocity}}</label>
+                        </td>
+                        <td nowrap><input type='radio' name='contact_chapter_{{user.id}}' value='4' data-ng-disabled='user.velocities[3].velocity == 0'>
+                            <label>{{user.velocities[3].velocity}}</label>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
