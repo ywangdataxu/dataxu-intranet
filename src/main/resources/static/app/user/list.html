@@ -11,12 +11,11 @@
     </thead>
     <tbody>
     <tr ng-repeat='user in users'>
-        <td>{{user.email}}</a></td>
-        <td>{{user.first_name}} {{user.last_name}}</td>
+        <td><a ng-click='editUser(user.id)'>{{user.email}}</a></td>
+        <td><a ng-click='editUser(user.id)'>{{user.first_name}} {{user.last_name}}</a></td>
         <td>{{user.created_on | date:'medium'}}</td>
         <td>{{user.updated_on | date:'medium'}}</td>
         <td nowrap>
-            <a ng-click='editUser(user.id)' class='btn btn-small btn-primary'>edit</a>&nbsp;
             <a ng-click='editUserSchedule(user.id)' class='btn btn-small btn-primary'>schedule</a>&nbsp;
             <a ng-click='deleteUser(user.id)' class='btn btn-small btn-danger'>delete</a>
         </td>

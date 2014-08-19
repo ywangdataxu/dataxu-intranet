@@ -1,4 +1,4 @@
-<h1>Plan List</h1>
+<h2>Plan List</h2>
 <table class="table table-condensed">
     <thead>
         <tr>
@@ -14,7 +14,7 @@
     </thead>
     <tbody>
     <tr ng-repeat='plan in plans'>
-        <td>{{plan.name}}</a></td>
+        <td><a ng-click='editPlan(plan.id)'>{{plan.name}}</a></td>
         <td>{{plan.description | cut:true:100:'...'}}</td>
         <td>{{plan.plan_contacts.length}}</td>
         <td>{{plan.start_date | date: 'MM/dd/yyyy'}}</td>
@@ -22,7 +22,6 @@
         <td>{{plan.created_on | date:'medium'}}</td>
         <td>{{plan.updated_on | date:'medium'}}</td>
         <td nowrap><a ng-click='showSchedule(plan.id)' class='btn btn-small btn-primary'>schedule</a>&nbsp;
-         <a ng-click='editPlan(plan.id)' class='btn btn-small btn-primary'>edit</a> &nbsp;
          <a ng-click='deletePlan(plan.id)' class='btn btn-small btn-danger'>delete</a></td>
     </tr>
     </tbody>

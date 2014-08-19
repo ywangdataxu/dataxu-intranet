@@ -8,3 +8,8 @@ div.buttons {
 	text-align: center;
 	margin: 10px;
 }
+
+td a {
+    cursor: pointer;
+    cursor: hand;
+}
