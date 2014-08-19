@@ -234,6 +234,22 @@ public class PlanController {
         Map<Integer, Map<Date, Double>> chapterVelocities = Maps.newTreeMap();
 
         for (PlanContact c : contacts) {
+            // determine the velocity
+            Integer chapterId = c.getChapterId();
+
+            Double velocity = 0D;
+            List<ContactVelocity> velocities = c.getContact().getVelocities();
+            for (ContactVelocity v : velocities) {
+                if (v.getChapter().getId() == chapterId) {
+                    velocity = v.getVelocity();
+                    break;
+                }
+            }
+
+            if (velocity == 0) {
+                continue;
+            }
+
             List<ContactSchedule> s = contactScheduleRepository.findByContactId(c.getContact().getId());
             List<ContactSchedule> filtered = Lists.newArrayList();
 
@@ -244,26 +260,25 @@ public class PlanController {
                 }
             }
 
-            // determine the velocity
-            Integer chapterId = c.getChapterId();
-            Double velocity = 0D;
-            List<ContactVelocity> velocities = c.getContact().getVelocities();
-            for (ContactVelocity v : velocities) {
-                if (v.getChapter().getId() == chapterId) {
-                    velocity = v.getVelocity();
+            Map<Date, Double> contactVelocities = getVelocities(velocity, filtered, plan);
+
+            boolean valid = false;
+            for (Double d : contactVelocities.values()) {
+                if (d > 0) {
+                    valid = true;
                     break;
                 }
             }
 
-            Map<Date, Double> contactVelocities = getVelocities(velocity, filtered, plan);
-
-            if (!chapterVelocities.containsKey(chapterId)) {
-                chapterVelocities.put(chapterId, contactVelocities);
-            } else {
-                // add to the existing one
-                Map<Date, Double> existing = chapterVelocities.get(chapterId);
-                Map<Date, Double> newList = addTwoMaps(contactVelocities, existing);
-                chapterVelocities.put(chapterId, newList);
+            if (valid) {
+                if (!chapterVelocities.containsKey(chapterId)) {
+                    chapterVelocities.put(chapterId, contactVelocities);
+                } else {
+                    // add to the existing one
+                    Map<Date, Double> existing = chapterVelocities.get(chapterId);
+                    Map<Date, Double> newList = addTwoMaps(contactVelocities, existing);
+                    chapterVelocities.put(chapterId, newList);
+                }
             }
         }
 

@@ -133,6 +133,7 @@ planApp.controller('PlanScheduleController', ['$scope', '$location', '$routePara
     $scope.myChart;
     $scope.legend = [];
     $scope.data = {};
+    $scope.chapter = ['LS', 'RTS', 'RWH', 'UI'];
     
     var colors = ["orange", "green", "grey", "red", "pink", "black", "yello", "purple"];
     var ctx = document.getElementById("myChart").getContext("2d");
