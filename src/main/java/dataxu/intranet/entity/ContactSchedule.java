@@ -25,11 +25,11 @@ public class ContactSchedule implements Comparable<ContactSchedule> {
     private Integer contactId;
 
     @Column(name = "start_date")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date startDate;
 
     @Column(name = "end_date")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date endDate;
 
     @Column(name = "reason")

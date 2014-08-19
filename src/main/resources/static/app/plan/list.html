@@ -17,8 +17,8 @@
         <td>{{plan.name}}</a></td>
         <td>{{plan.description | cut:true:100:'...'}}</td>
         <td>{{plan.plan_contacts.length}}</td>
-        <td>{{plan.start_date}}</td>
-        <td>{{plan.end_date}}</td>
+        <td>{{plan.start_date | date: 'MM/dd/yyyy'}}</td>
+        <td>{{plan.end_date | date: 'MM/dd/yyyy'}}</td>
         <td>{{plan.created_on | date:'medium'}}</td>
         <td>{{plan.updated_on | date:'medium'}}</td>
         <td nowrap><a ng-click='showSchedule(plan.id)' class='btn btn-small btn-primary'>schedule</a>&nbsp;
@@ -28,4 +28,3 @@
     </tbody>
 </table>
 <a ng-click='createNewPlan()' class='btn btn-small btn-primary'>Create New Plan</a>
-<a ng-click='showUsers()' class='btn btn-small btn-primary'>List Users</a>

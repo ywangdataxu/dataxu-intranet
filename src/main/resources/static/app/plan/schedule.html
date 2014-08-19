@@ -4,28 +4,34 @@
     </h1>
 
     <div>
-        Start: {{plan.start_date}}
-        End: {{plan.end_date}}
+        <b>Start</b>: {{plan.start_date | date:'MM/dd/yyyy'}}
+        <b>End</b>: {{plan.end_date | date:'MM/dd/yyyy'}}
     </div>
+    <br/>
     <div>
         <table>
             <thead>
+                <tr>
                 <td colspan='5'>Engineers</td>
+                <tr>
             </thead>
             <tr ng-repeat='user in plan.plan_contacts'>
                 <td><a href='#/users/detail/{{user.contact.id}}'>{{user.contact.first_name}}
                         {{user.contact.last_name}}</a></td>
                 <td nowrap><input disabled='true' type='radio' name='contact_chapter_{{user.contact.id}}' value='1'
-                    ng-model='user.chapter_id'><label>{{user.contact.velocities[0].velocity}}</label></td>
+                    ng-model='user.chapter_id'><label>LS {{user.contact.velocities[0].velocity}}</label></td>
                 <td nowrap><input disabled='true' type='radio' name='contact_chapter_{{user.contact.id}}' value='2'
-                    ng-model='user.chapter_id'><label>{{user.contact.velocities[1].velocity}}</label></td>
+                    ng-model='user.chapter_id'><label>RTS {{user.contact.velocities[1].velocity}}</label></td>
                 <td nowrap><input disabled='true' type='radio' name='contact_chapter_{{user.contact.id}}' value='3'
-                    ng-model='user.chapter_id'><label>{{user.contact.velocities[2].velocity}}</label></td>
+                    ng-model='user.chapter_id'><label>RWH {{user.contact.velocities[2].velocity}}</label></td>
                 <td nowrap><input disabled='true' type='radio' name='contact_chapter_{{user.contact.id}}' value='4'
-                    ng-model='user.chapter_id'><label>{{user.contact.velocities[3].velocity}}</label></td>
+                    ng-model='user.chapter_id'><label>UI {{user.contact.velocities[3].velocity}}</label></td>
             </tr>
         </table>
     </div>
+    
+    <br/>
+    <br/>
 
     <div ng-app="chartjs-directive">
         <chart value="myChart" type='Bar' width='1200'></chart>

@@ -47,11 +47,11 @@ public class Plan implements Comparable<Plan> {
     private Date updatedOn;
 
     @Column(name = "start_date", nullable = false)
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date startDate;
 
     @Column(name = "end_date", nullable = false)
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date endDate;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
