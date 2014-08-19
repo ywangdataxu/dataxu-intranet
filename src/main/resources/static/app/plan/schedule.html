@@ -4,41 +4,52 @@
     </h1>
 
     <div>
-        <b>Start</b>: {{plan.start_date | date:'MM/dd/yyyy'}}
-        <b>End</b>: {{plan.end_date | date:'MM/dd/yyyy'}}
+        <b>Start</b>: {{plan.start_date | date:'MM/dd/yyyy'}} <b>End</b>: {{plan.end_date | date:'MM/dd/yyyy'}}
     </div>
-    <br/>
+    <br />
     <div>
-        <table>
+        <table style='width: 80%'>
             <thead>
                 <tr>
-                <td colspan='5'>Engineers</td>
+                    <th>Email</th>
+                    <th>Name</th>
+                    <th colspan='4' style='text-align: center'>Chapter Velocities</th>
+                </tr>
                 <tr>
+                    <th></th>
+                    <th></th>
+                    <th>LS</th>
+                    <th>RTS</th>
+                    <th>RWH</th>
+                    <th>UI</th>
+                </tr>
             </thead>
-            <tr ng-repeat='user in plan.plan_contacts'>
-                <td><a href='#/users/detail/{{user.contact.id}}'>{{user.contact.first_name}}
-                        {{user.contact.last_name}}</a></td>
-                <td nowrap><input disabled='true' type='radio' name='contact_chapter_{{user.contact.id}}' value='1'
-                    ng-model='user.chapter_id'><label>LS {{user.contact.velocities[0].velocity}}</label></td>
-                <td nowrap><input disabled='true' type='radio' name='contact_chapter_{{user.contact.id}}' value='2'
-                    ng-model='user.chapter_id'><label>RTS {{user.contact.velocities[1].velocity}}</label></td>
-                <td nowrap><input disabled='true' type='radio' name='contact_chapter_{{user.contact.id}}' value='3'
-                    ng-model='user.chapter_id'><label>RWH {{user.contact.velocities[2].velocity}}</label></td>
-                <td nowrap><input disabled='true' type='radio' name='contact_chapter_{{user.contact.id}}' value='4'
-                    ng-model='user.chapter_id'><label>UI {{user.contact.velocities[3].velocity}}</label></td>
-            </tr>
+            <tbody>
+                <tr ng-repeat='user in plan.plan_contacts'>
+                    <td><a href='#/users/detail/{{user.contact.id}}'>{{user.contact.first_name}}
+                            {{user.contact.last_name}}</a></td>
+                    <td>{{user.contact.email}}</td>
+                    <td nowrap><input type='radio' name='contact_chapter_{{user.contact.id}}' value='1'
+                        ng-model='user.chapter_id'><label>LS {{user.contact.velocities[0].velocity}}</label></td>
+                    <td nowrap><input type='radio' name='contact_chapter_{{user.contact.id}}' value='2'
+                        ng-model='user.chapter_id'><label>RTS {{user.contact.velocities[1].velocity}}</label></td>
+                    <td nowrap><input type='radio' name='contact_chapter_{{user.contact.id}}' value='3'
+                        ng-model='user.chapter_id'><label>RWH {{user.contact.velocities[2].velocity}}</label></td>
+                    <td nowrap><input type='radio' name='contact_chapter_{{user.contact.id}}' value='4'
+                        ng-model='user.chapter_id'><label>UI {{user.contact.velocities[3].velocity}}</label></td>
+                </tr>
+            </tbody>
         </table>
     </div>
-    
-    <br/>
-    <br/>
+
+    <br /> <br />
 
     <div ng-app="chartjs-directive">
-        <chart value="myChart" type='Bar' width='1200'></chart>
+        <chart value="myChart" type='Bar' width='1400'></chart>
     </div>
-    <div> 
-        <span ng-repeat='l in legend'>
-            <span style='background:{{l.color}}'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> {{l.name}}&nbsp;&nbsp;&nbsp;
+    <div>
+        <span ng-repeat='l in legend'> <span style='background: {{l.color}}'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            {{l.name}}&nbsp;&nbsp;&nbsp;
         </span>
     </div>
 </div>
