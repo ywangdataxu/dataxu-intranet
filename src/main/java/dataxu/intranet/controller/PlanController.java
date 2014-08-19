@@ -156,169 +156,179 @@ public class PlanController {
     }
 
     public static class ScheduleChartDataSet {
-        private final List<String> dates;
+        private final List<Date> dates;
         private final List<ScheduleChartData> dataSet;
 
-        public ScheduleChartDataSet(List<String> dates, List<ScheduleChartData> dataSet) {
+        public ScheduleChartDataSet(List<Date> dates, List<ScheduleChartData> dataSet) {
             this.dates = dates;
             this.dataSet = dataSet;
         }
 
         public List<String> getDates() {
-            return dates;
+            Collections.sort(dates);
+            List<String> result = Lists.newArrayList();
+            for (Date d : dates) {
+                result.add(DATE_FORMAT.format(d));
+            }
+            return result;
         }
 
         public List<ScheduleChartData> getDataSet() {
             return dataSet;
         }
-
     }
 
     @RequestMapping(value = "/api/plans/{id}/schedules", method = RequestMethod.GET)
     @ResponseBody
     public ScheduleChartDataSet getPlanSchedules(@PathVariable("id") Integer planId) {
-        Plan p = planRepository.findOne(planId);
-        List<PlanContact> contacts = p.getPlanContacts();
+        Plan plan = planRepository.findOne(planId);
+        List<PlanContact> contacts = plan.getPlanContacts();
 
-        Date planStartDate = p.getStartDate();
-        Date planEndDate = p.getEndDate();
+        Map<Integer, Map<Date, Double>> chapterVelocities = Maps.newTreeMap();
 
-        Map<Integer, Map<Date, Double>> schedules = Maps.newHashMap();
         for (PlanContact c : contacts) {
             List<ContactSchedule> s = contactScheduleRepository.findByContactId(c.getContact().getId());
             List<ContactSchedule> filtered = Lists.newArrayList();
 
             for (ContactSchedule cs : s) {
-                Date scheduleStartDate = cs.getStartDate();
-                Date scheduleEndDate = cs.getEndDate();
-
-                if (scheduleEndDate.before(planStartDate) || scheduleStartDate.after(planEndDate)) {
-                    continue;
+                ContactSchedule newSchedule = updateScheduleBaseOnPlan(plan, cs);
+                if (newSchedule != null) {
+                    filtered.add(newSchedule);
                 }
-
-                Date newStartDate = scheduleStartDate;
-                Date newEndDate = scheduleEndDate;
-
-                if (scheduleStartDate.before(planStartDate)) {
-                    newStartDate = planStartDate;
-                }
-                if (scheduleEndDate.after(planEndDate)) {
-                    newEndDate = planEndDate;
-                }
-
-                ContactSchedule newSchedule = new ContactSchedule(cs, newStartDate, newEndDate);
-                filtered.add(newSchedule);
             }
-            Collections.sort(filtered);
 
+            // determine the velocity
             Integer chapterId = c.getChapterId();
             Double velocity = 0D;
             List<ContactVelocity> velocities = c.getContact().getVelocities();
             for (ContactVelocity v : velocities) {
                 if (v.getChapter().getId() == chapterId) {
                     velocity = v.getVelocity();
+                    break;
                 }
             }
-            Map<Date, Double> currAccumulatedVelocity = getAccumulatedVelocity(velocity, filtered, planStartDate,
-                    planEndDate);
-            if (schedules.containsKey(chapterId)) {
-                Map<Date, Double> existing = schedules.get(chapterId);
-                Map<Date, Double> newOne = Maps.newTreeMap();
 
-                // merge
-                for (Date d : existing.keySet()) {
-                    newOne.put(d, existing.get(d) + currAccumulatedVelocity.get(d));
-                }
-                schedules.put(chapterId, newOne);
+            Map<Date, Double> contactVelocities = getVelocities(velocity, filtered, plan);
+
+            if (!chapterVelocities.containsKey(chapterId)) {
+                chapterVelocities.put(chapterId, contactVelocities);
             } else {
-                schedules.put(chapterId, currAccumulatedVelocity);
+                // add to the existing one
+                Map<Date, Double> existing = chapterVelocities.get(chapterId);
+                Map<Date, Double> newList = addTwoMaps(contactVelocities, existing);
+                chapterVelocities.put(chapterId, newList);
             }
         }
 
-        List<ChapterSchedule> result = Lists.newArrayList();
-        for (Integer i : schedules.keySet()) {
-            List<PlanSchedule> ps = Lists.newArrayList();
+        // accumulated one
+        List<Date> allWorkingDays = Lists.newArrayList(getDaysInWeeks(plan.getStartDate(), plan.getEndDate()));
+        List<ScheduleChartData> dataSet = Lists.newArrayList();
 
-            for (Date d : schedules.get(i).keySet()) {
-                ps.add(new PlanSchedule(d, schedules.get(i).get(d)));
+        List<Date> resultWorkingDays = allWorkingDays;
+        Map<Integer, Map<Date, Double>> resultChapterVelocities = chapterVelocities;
+
+        boolean groupByWeek = true;
+        if (groupByWeek) {
+            resultWorkingDays = getAllMondays(allWorkingDays);
+
+            resultChapterVelocities = Maps.newTreeMap();
+
+            for (Map.Entry<Integer, Map<Date, Double>> entry : chapterVelocities.entrySet()) {
+                resultChapterVelocities.put(entry.getKey(), groupByWeek(entry.getValue()));
             }
-
-            result.add(new ChapterSchedule(i, ps));
         }
 
-        return convert(result);
+        for (Map.Entry<Integer, Map<Date, Double>> entry : resultChapterVelocities.entrySet()) {
+            List<Double> data = accumulateList(entry.getValue().values());
+            dataSet.add(new ScheduleChartData(CHAPTERS.get(entry.getKey()), data));
+        }
+
+        // ScheduleChartData // ScheduleChartData(String chapterName,
+        // List<Double> data) {
+        return new ScheduleChartDataSet(Lists.newArrayList(resultWorkingDays), dataSet);
     }
 
-    public ScheduleChartDataSet convert(List<ChapterSchedule> schedules) {
-        List<String> chapterNames = Lists.newArrayList();
-
-        Map<Integer, String> chapterMap = Maps.newHashMap();
-        chapterMap.put(1, "LS");
-        chapterMap.put(2, "RTS");
-        chapterMap.put(3, "RWH");
-        chapterMap.put(4, "UI");
-
-        List<String> dates = Lists.newArrayList();
-        int count = 0;
-
-        List<ScheduleChartData> dataList = Lists.newArrayList();
-
-        for (ChapterSchedule c : schedules) {
-            String chapterName = chapterMap.get(c.getChapterId());
-
-            List<Double> data = Lists.newArrayList();
-            boolean allZeros = true;
-
-            List<PlanSchedule> weekly = groupByWeek(c.getPlanSchedules());
-            // by week
-            for (PlanSchedule ps : weekly) {
-                double v = ps.getVelocity();
-                data.add(v / 10);
-
-                if (v != 0) {
-                    allZeros = false;
-                }
-
-                if (count == 0) {
-                    dates.add(FORMAT.format(ps.getDate()));
-                }
-            }
-
-            if (!allZeros) {
-                ScheduleChartData resultData = new ScheduleChartData(chapterName, data);
-                chapterNames.add(chapterName);
-                dataList.add(resultData);
-            }
-            count++;
+    private List<Date> getAllMondays(Iterable<Date> src) {
+        Set<Date> result = Sets.newHashSet();
+        for (Date d : src) {
+            Date monday = getMonday(d);
+            result.add(monday);
         }
 
-        return new ScheduleChartDataSet(dates, dataList);
+        return Lists.newArrayList(result);
     }
 
-    private static List<PlanSchedule> groupByWeek(List<PlanSchedule> src) {
-        Date currDate = null;
-        PlanSchedule currSchedule = null;
-        List<PlanSchedule> result = Lists.newArrayList();
-        for (PlanSchedule ps : src) {
-            if (currDate == null) {
-                currDate = getMonday(ps.getDate());
-                currSchedule = new PlanSchedule(currDate, ps.getVelocity());
-                result.add(currSchedule);
-            } else {
-                Date monday = getMonday(ps.getDate());
-                if (monday.equals(currDate)) {
-                    currSchedule.setVelocity(currSchedule.getVelocity() + ps.getVelocity());
-                } else {
-                    currDate = getMonday(ps.getDate());
-                    currSchedule = new PlanSchedule(currDate, ps.getVelocity());
-                    result.add(currSchedule);
-                }
+    private Map<Date, Double> groupByWeek(Map<Date, Double> velocities) {
+        Map<Date, Double> result = Maps.newTreeMap();
+
+        for (Date d : velocities.keySet()) {
+            Date monday = getMonday(d);
+            double v = 0;
+            if (result.containsKey(monday)) {
+                v = result.get(monday);
             }
+
+            result.put(monday, v + velocities.get(d));
         }
+
         return result;
     }
 
-    private static Date getMonday(Date src) {
+    private List<Double> accumulateList(Iterable<Double> src) {
+        List<Double> result = Lists.newArrayList();
+
+        double curr = 0;
+        for (Double d : src) {
+            curr += d;
+            result.add(curr);
+        }
+
+        return result;
+    }
+
+    private Map<Date, Double> addTwoMaps(Map<Date, Double> d1, Map<Date, Double> d2) {
+        Map<Date, Double> result = Maps.newTreeMap();
+
+        for (Date d : d1.keySet()) {
+            result.put(d, d1.get(d) + d2.get(d));
+        }
+
+        return result;
+    }
+
+    private ContactSchedule updateScheduleBaseOnPlan(Plan plan, ContactSchedule cs) {
+        Date planStartDate = plan.getStartDate();
+        Date planEndDate = plan.getEndDate();
+
+        Date scheduleStartDate = cs.getStartDate();
+        Date scheduleEndDate = cs.getEndDate();
+
+        if (scheduleEndDate.before(planStartDate) || scheduleStartDate.after(planEndDate)) {
+            return null;
+        }
+
+        Date newStartDate = scheduleStartDate;
+        Date newEndDate = scheduleEndDate;
+
+        if (scheduleStartDate.before(planStartDate)) {
+            newStartDate = planStartDate;
+        }
+        if (scheduleEndDate.after(planEndDate)) {
+            newEndDate = planEndDate;
+        }
+
+        return new ContactSchedule(cs, newStartDate, newEndDate);
+    }
+
+    private static final Map<Integer, String> CHAPTERS = Maps.newHashMap();
+    static {
+        CHAPTERS.put(1, "LS");
+        CHAPTERS.put(2, "RTS");
+        CHAPTERS.put(3, "RWH");
+        CHAPTERS.put(4, "UI");
+    }
+
+    private Date getMonday(Date src) {
         System.out.println(src);
         Calendar srcDate = Calendar.getInstance();
         srcDate.setTime(src);
@@ -327,47 +337,33 @@ public class PlanController {
         return srcDate.getTime();
     }
 
-    public static void main(String args[]) {
-        System.out.println(getMonday(new Date()));
-    }
-
-    private static Map<Date, Double> getAccumulatedVelocity(double velocity, List<ContactSchedule> schedules,
-            Date startDate, Date endDate) {
-        Set<Date> workingDays = getWorkingDays(schedules, startDate, endDate);
-        Set<Date> all = getDaysInWeeks(startDate, endDate);
-
-        Map<Date, Double> result = Maps.newTreeMap();
-
-        double accumulated = 0;
-        for (Date a : all) {
-            if (workingDays.contains(a)) {
-                accumulated += velocity;
-            }
-            result.put(a, accumulated);
-        }
-
-        return result;
-    }
-
-    private static Set<Date> getWorkingDays(List<ContactSchedule> schedules, Date startDate, Date endDate) {
+    private Map<Date, Double> getVelocities(double velocity, List<ContactSchedule> schedules, Plan plan) {
         Collections.sort(schedules);
 
-        Set<Date> allDays = getDaysInWeeks(startDate, endDate);
+        Date startDate = plan.getStartDate();
+        Date endDate = plan.getEndDate();
+
+        Set<Date> allWorkingDays = getDaysInWeeks(startDate, endDate);
+
+        Map<Date, Double> result = Maps.newTreeMap();
+        for (Date d : allWorkingDays) {
+            result.put(d, velocity);
+        }
 
         for (ContactSchedule schedule : schedules) {
             Set<Date> nonWorkingDays = getDaysInWeeks(schedule.getStartDate(), schedule.getEndDate());
 
             for (Date d : nonWorkingDays) {
-                allDays.remove(d);
+                result.put(d, 0D);
             }
         }
 
-        return allDays;
+        return result;
     }
 
-    private static final FastDateFormat FORMAT = FastDateFormat.getInstance("MM/dd");
+    private static final FastDateFormat DATE_FORMAT = FastDateFormat.getInstance("MM/dd/yyyy");
 
-    private static Set<Date> getDaysInWeeks(Date startDate, Date endDate) {
+    private Set<Date> getDaysInWeeks(Date startDate, Date endDate) {
         Calendar start = Calendar.getInstance();
         start.setTime(startDate);
 
