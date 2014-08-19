@@ -130,18 +130,21 @@ planApp.controller('PlanDetailController', ['$scope', '$location', '$routeParams
 
 planApp.controller('PlanScheduleController', ['$scope', '$location', '$routeParams', 'Plan', 'Users', 'PlanSchedules', function($scope, $location, $routeParams, Plan, Users, PlanSchedules) {
     $scope.plan = Plan.show({id: $routeParams.id});
-    $scope.myChart = {};
+    $scope.myChart;
     $scope.legend = [];
+    $scope.data = {};
     
     var colors = ["orange", "green", "grey", "red", "pink", "black", "yello", "purple"];
+    var ctx = document.getElementById("myChart").getContext("2d");
     
     $scope.updateSchedule = function() {
         Plan.update($scope.plan, function() {
-            $scope.updateScheduleChart();
+            $scope.myChart.destroy();
+            $scope.updateScheduleChart(true);
         });
     }
     
-    $scope.updateScheduleChart = function() {
+    $scope.updateScheduleChart = function(update) {
         $scope.schedules = PlanSchedules.get({id: $routeParams.id}, function() {
             $scope.legend = [];
             var dataSet = [];
@@ -152,16 +155,18 @@ planApp.controller('PlanScheduleController', ['$scope', '$location', '$routePara
                         data: $scope.schedules.data_set[i].data
                 });
             }
-            var data = {
+            $scope.data = {
                     labels: $scope.schedules.dates,
                     datasets: dataSet
             };
-            
-            $scope.myChart = {"data": data, "options": {} };
+           
+            ctx.canvas.width = 1200;
+            ctx.canvas.height = 300;
+            $scope.myChart = new Chart(ctx).Bar($scope.data);
         });
     }
     
-    $scope.updateScheduleChart();
+    $scope.updateScheduleChart(false);
 }]);
 
 planApp.controller('CreatePlanController', ['$scope', '$location', '$routeParams', 'Plans', function($scope, $location, $routeParams, Plans) {
