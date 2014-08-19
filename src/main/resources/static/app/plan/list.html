@@ -10,7 +10,6 @@
             <td>Created On</td>
             <td>Updated On</td>
             <td width='20px'></td>
-            <td width='20px'></td>
         </tr>
     </thead>
     <tbody>
@@ -22,8 +21,9 @@
         <td>{{plan.end_date}}</td>
         <td>{{plan.created_on | date:'medium'}}</td>
         <td>{{plan.updated_on | date:'medium'}}</td>
-        <td><a ng-click='editPlan(plan.id)' class='btn btn-small btn-primary'>edit</a></td>
-        <td><a ng-click='deletePlan(plan.id)' class='btn btn-small btn-danger'>delete</a></td>
+        <td nowrap><a ng-click='showSchedule(plan.id)' class='btn btn-small btn-primary'>schedule</a>&nbsp;
+         <a ng-click='editPlan(plan.id)' class='btn btn-small btn-primary'>edit</a> &nbsp;
+         <a ng-click='deletePlan(plan.id)' class='btn btn-small btn-danger'>delete</a></td>
     </tr>
     </tbody>
 </table>

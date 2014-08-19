@@ -73,6 +73,11 @@ planApp.controller('PlanListController', ['$scope', '$location', 'Plans', functi
     $scope.showUsers = function() {
         $location.path('/users');
     }
+    
+    
+    $scope.showSchedule = function(planId) {
+        $location.path('/schedule/' + planId);
+    }
 }]);
 
 planApp.controller('PlanDetailController', ['$scope', '$location', '$routeParams', 'Plan', 'Users', 'FilterUsers', function($scope, $location, $routeParams, Plan, Users, FilterUsers) {
