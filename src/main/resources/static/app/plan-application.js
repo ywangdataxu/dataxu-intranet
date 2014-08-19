@@ -134,6 +134,8 @@ planApp.controller('PlanScheduleController', ['$scope', '$location', '$routePara
     $scope.legend = [];
     $scope.data = {};
     $scope.chapter = ['LS', 'RTS', 'RWH', 'UI'];
+    $scope.showDetails = true;
+    $scope.detailToggleText = 'Hide Plan Details';
     
     var colors = ["orange", "green", "grey", "red", "pink", "black", "yello", "purple"];
     var ctx = document.getElementById("myChart").getContext("2d");
@@ -168,6 +170,15 @@ planApp.controller('PlanScheduleController', ['$scope', '$location', '$routePara
     }
     
     $scope.updateScheduleChart(false);
+    
+    $scope.toggleDetails = function() {
+        $scope.showDetails = !$scope.showDetails;
+        if ($scope.showDetails) {
+            $scope.detailToggleText = 'Hide Plan Details';
+        } else {
+            $scope.detailToggleText = 'Show Plan Details';
+        }
+    }
 }]);
 
 planApp.controller('CreatePlanController', ['$scope', '$location', '$routeParams', 'Plans', function($scope, $location, $routeParams, Plans) {
