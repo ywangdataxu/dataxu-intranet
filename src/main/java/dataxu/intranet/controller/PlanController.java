@@ -312,7 +312,7 @@ public class PlanController {
             List<Double> realData = Lists.newArrayList();
             // now divided by 10
             for (Double d : data) {
-                realData.add(d / 10);
+                realData.add(d / 10 * (1 - (double) plan.getMaintenanceAllowance() / 100));
             }
 
             dataSet.add(new ScheduleChartData(CHAPTERS.get(entry.getKey()), realData));

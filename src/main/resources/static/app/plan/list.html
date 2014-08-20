@@ -5,6 +5,7 @@
             <td>Plan Name</td>
             <td>Description</td>
             <td>Engineers</td>
+            <td>Maintenace</td>
             <td>Start Date</td>
             <td>End Date</td>
             <td>Created On</td>
@@ -17,6 +18,7 @@
         <td><a ng-click='editPlan(plan.id)'>{{plan.name}}</a></td>
         <td>{{plan.description | cut:true:100:'...'}}</td>
         <td>{{plan.plan_contacts.length}}</td>
+        <td>{{plan.maintenance_allowance}}%</td>
         <td>{{plan.start_date | date: 'MM/dd/yyyy'}}</td>
         <td>{{plan.end_date | date: 'MM/dd/yyyy'}}</td>
         <td>{{plan.created_on | date:'medium'}}</td>

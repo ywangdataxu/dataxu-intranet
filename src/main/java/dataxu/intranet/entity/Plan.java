@@ -58,6 +58,17 @@ public class Plan implements Comparable<Plan> {
     @JoinColumn(name = "plan_id")
     private Set<PlanContact> planContacts;
 
+    @Column(name = "maintenance_allowance", nullable = false)
+    private Integer maintenanceAllowance;
+
+    public Integer getMaintenanceAllowance() {
+        return maintenanceAllowance;
+    }
+
+    public void setMaintenanceAllowance(Integer maintenanceAllowance) {
+        this.maintenanceAllowance = maintenanceAllowance;
+    }
+
     @PrePersist
     protected void prePersist() {
         Date date = new Date();

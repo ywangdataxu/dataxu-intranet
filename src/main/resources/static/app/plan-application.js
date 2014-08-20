@@ -92,6 +92,10 @@ planApp.controller('PlanListController', ['$scope', '$location', 'Plans', functi
 planApp.controller('PlanDetailController', ['$scope', '$location', '$routeParams', 'Plan', 'Users', 'FilterUsers', function($scope, $location, $routeParams, Plan, Users, FilterUsers) {
     $scope.plan = Plan.show({id: $routeParams.id});
     $scope.users = FilterUsers.query({id: $routeParams.id});
+    $scope.allowances = [];
+    for (var i = 0; i <= 100; i++) {
+        $scope.allowances[i] = {name: i + '%', value: i};
+    }
     
     $scope.cancel = function() {
         $location.path('/list');
@@ -210,6 +214,10 @@ planApp.controller('PlanScheduleController', ['$scope', '$location', '$routePara
 
 planApp.controller('CreatePlanController', ['$scope', '$location', '$routeParams', 'Plans', function($scope, $location, $routeParams, Plans) {
     $scope.plan = {};
+    $scope.allowances = [];
+    for (var i = 0; i <= 100; i++) {
+        $scope.allowances[i] = {name: i + '%', value: i};
+    }
     
     $scope.cancel = function() {
         $location.path('/list');
