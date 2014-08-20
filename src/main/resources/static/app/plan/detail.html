@@ -63,19 +63,28 @@
                         </td>
                         <td>{{user.contact.email}}</td>
                         <td nowrap>
-                            <input type='radio' name='contact_chapter_{{user.contact.id}}' value='1' ng-model='user.chapter_id' data-ng-disabled='user.contact.velocities[0].velocity == 0'>
-                            <label>{{user.contact.velocities[0].velocity}}</label>
+                            <label class='radio inline'>
+                                <input type='radio' name='contact_chapter_{{user.contact.id}}' value='1' ng-model='user.chapter_id' data-ng-disabled='user.contact.velocities[0].velocity == 0'>
+                                {{user.contact.velocities[0].velocity}}
+                            </label>
                         </td>
                         <td nowrap>
-                            <input type='radio' name='contact_chapter_{{user.contact.id}}' value='2' ng-model='user.chapter_id' data-ng-disabled='user.contact.velocities[1].velocity == 0'>
-                            <label>{{user.contact.velocities[1].velocity}}</label>
+                            <label class='radio inline'>
+                                <input type='radio' name='contact_chapter_{{user.contact.id}}' value='2' ng-model='user.chapter_id' data-ng-disabled='user.contact.velocities[1].velocity == 0'>
+                                {{user.contact.velocities[1].velocity}}
+                            </label>
                         </td>
                         <td nowrap>
-                            <input type='radio' name='contact_chapter_{{user.contact.id}}' value='3' ng-model='user.chapter_id' data-ng-disabled='user.contact.velocities[2].velocity == 0'>
-                            <label>{{user.contact.velocities[2].velocity}}</label></td>
+                            <label class='radio inline'>
+                                <input type='radio' name='contact_chapter_{{user.contact.id}}' value='3' ng-model='user.chapter_id' data-ng-disabled='user.contact.velocities[2].velocity == 0'>
+                                {{user.contact.velocities[2].velocity}}
+                            </label>
+                        </td>
                         <td nowrap>
-                            <input type='radio' name='contact_chapter_{{user.contact.id}}' value='4' ng-model='user.chapter_id' data-ng-disabled='user.contact.velocities[3].velocity == 0'>
-                            <label>{{user.contact.velocities[3].velocity}}</label>
+                            <label class='radio inline'>
+                                <input type='radio' name='contact_chapter_{{user.contact.id}}' value='4' ng-model='user.chapter_id' data-ng-disabled='user.contact.velocities[3].velocity == 0'>
+                                {{user.contact.velocities[3].velocity}}
+                            </label>
                         </td>
                     </tr>
                     <tr ng-repeat='user in users'>
@@ -87,19 +96,28 @@
                         </td>
                         <td>{{user.email}}</td>
                         <td nowrap>
-                            <input type='radio' name='contact_chapter_{{user.id}}' value='1' data-ng-disabled='user.velocities[0].velocity == 0'>
-                            <label>{{user.velocities[0].velocity}}</label>
+                            <label class='radio inline'>
+                                <input type='radio' name='contact_chapter_{{user.id}}' value='1' data-ng-disabled='user.velocities[0].velocity == 0'>
+                                {{user.velocities[0].velocity}}
+                            </label>
                         </td>
                         <td nowrap>
-                            <input type='radio' name='contact_chapter_{{user.id}}' value='2' data-ng-disabled='user.velocities[1].velocity == 1'>
-                            <label>{{user.velocities[1].velocity}}</label>
+                            <label class='radio inline'>
+                                <input type='radio' name='contact_chapter_{{user.id}}' value='2' data-ng-disabled='user.velocities[1].velocity == 1'>
+                                {{user.velocities[1].velocity}}
+                            </label>
                         </td>
                         <td nowrap>
-                            <input type='radio' name='contact_chapter_{{user.id}}' value='3' data-ng-disabled='user.velocities[2].velocity == 0'>
-                            <label>{{user.velocities[2].velocity}}</label>
+                            <label class='radio inline'>
+                                <input type='radio' name='contact_chapter_{{user.id}}' value='3' data-ng-disabled='user.velocities[2].velocity == 0'>
+                                {{user.velocities[2].velocity}}
+                            </label>
                         </td>
-                        <td nowrap><input type='radio' name='contact_chapter_{{user.id}}' value='4' data-ng-disabled='user.velocities[3].velocity == 0'>
-                            <label>{{user.velocities[3].velocity}}</label>
+                        <td nowrap>
+                            <label class='radio inline'>
+                                <input type='radio' name='contact_chapter_{{user.id}}' value='4' data-ng-disabled='user.velocities[3].velocity == 0'>
+                                {{user.velocities[3].velocity}}
+                            </label>
                         </td>
                     </tr>
                     </tbody>
