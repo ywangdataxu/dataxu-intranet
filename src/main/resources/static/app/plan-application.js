@@ -53,6 +53,15 @@ planApp.factory('UserSchedules', ['$resource', function($resource) {
     });
 }]);
 
+planApp.controller('HeaderController', ['$scope', '$location', function($scope, $location) {
+    $scope.isPlansMenuActive = function () {
+        return $location.path().indexOf('/users') != 0;
+    };
+    
+    $scope.isUsersMenuActive = function() {
+        return $location.path().indexOf('/users') == 0;
+    }
+}]);
 
 planApp.controller('PlanListController', ['$scope', '$location', 'Plans', function($scope, $location, Plans) {
     $scope.plans = Plans.query(); 
