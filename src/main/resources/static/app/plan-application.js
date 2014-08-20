@@ -137,7 +137,8 @@ planApp.controller('PlanDetailController', ['$scope', '$location', '$routeParams
     }
 }]);
 
-planApp.controller('PlanScheduleController', ['$scope', '$location', '$routeParams', 'Plan', 'Users', 'PlanSchedules', function($scope, $location, $routeParams, Plan, Users, PlanSchedules) {
+planApp.controller('PlanScheduleController', ['$scope', '$location', '$routeParams', 'Plan', 'Users', 'PlanSchedules',
+                                              function($scope, $location, $routeParams, Plan, Users, PlanSchedules) {
     $scope.chartWidth = 1200;
     $scope.chartHeight = 300;
     $scope.plan = Plan.show({id: $routeParams.id});

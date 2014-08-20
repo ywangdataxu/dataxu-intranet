@@ -30,28 +30,10 @@
                     <td><a href='#/users/detail/{{user.contact.id}}'>{{user.contact.first_name}}
                             {{user.contact.last_name}}</a></td>
                     <td>{{user.contact.email}}</td>
-                    <td nowrap>
+                    <td ng-repeat='i in [0, 1, 2, 3]'>
                         <label class='radio inline'>
-                            <input type='radio' ng-change='updateSchedule()' name='contact_chapter_{{user.contact.id}}' value='1' ng-model='user.chapter_id' data-ng-disabled='user.contact.velocities[0].velocity == 0'>
-                            {{user.contact.velocities[0].velocity}}
-                        </label>
-                    </td>
-                    <td nowrap>
-                        <label class='radio inline'>
-                            <input type='radio' ng-change='updateSchedule()' name='contact_chapter_{{user.contact.id}}' value='2' ng-model='user.chapter_id' data-ng-disabled='user.contact.velocities[1].velocity == 0'>
-                            {{user.contact.velocities[1].velocity}}
-                        </label>
-                    </td>
-                    <td nowrap>
-                        <label class='radio inline'>
-                            <input type='radio' ng-change='updateSchedule()' name='contact_chapter_{{user.contact.id}}' value='3' ng-model='user.chapter_id' data-ng-disabled='user.contact.velocities[2].velocity == 0'>
-                            {{user.contact.velocities[2].velocity}}
-                        </label>
-                    </td>
-                    <td nowrap>
-                        <label class='radio inline'>
-                            <input type='radio' ng-change='updateSchedule()' name='contact_chapter_{{user.contact.id}}' value='4' ng-model='user.chapter_id' data-ng-disabled='user.contact.velocities[3].velocity == 0'>
-                            {{user.contact.velocities[3].velocity}}
+                            <input type='radio' ng-change='updateSchedule()' name='contact_chapter_{{user.contact.id}}' value='{{i + 1}}' ng-model='user.chapter_id' data-ng-disabled='user.contact.velocities[i].velocity == 0'>
+                            {{user.contact.velocities[i].velocity}}
                         </label>
                     </td>
                 </tr>
