@@ -272,7 +272,7 @@ planApp.controller('UserScheduleController', ['$scope', '$location', '$routePara
     };
     
     $scope.cancel = function() {
-        $location.path('/users/detail/' + $scope.user.id);
+        $location.path('/users');
     }
     
     $scope.deleteSchedule = function(scheduleId) {
@@ -294,7 +294,7 @@ planApp.controller('UserScheduleController', ['$scope', '$location', '$routePara
     
     $scope.updateSchedule = function() {
         UserSchedules.update({id: $scope.user.id}, $scope.schedules);
-        $location.path('/users/detail/' + $scope.user.id);
+        $location.path('/users');
     }
 }]);
 planApp.controller('CreateUserController', ['$scope', '$location', '$routeParams', 'Users', 'Chapters', function($scope, $location, $routeParams, Users, Chapters) {
