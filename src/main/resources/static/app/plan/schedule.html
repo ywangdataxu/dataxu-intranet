@@ -4,8 +4,6 @@
     </h2>
      
     <div ng-show='showDetails'>
-        <a href='javascript:void(0);' ng-click='toggleDetails()'>{{detailToggleText}}</a>
-        <br/><br/>
         <table style='border:0px'>
             <tr style='background-color: transparent;'>
                 <td>Start Date</td>
@@ -26,6 +24,7 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th colspan='4' style='text-align: center'>Chapter Velocities</th>
+                    <th></th>
                 </tr>
                 <tr>
                     <th></th>
@@ -34,6 +33,7 @@
                     <th>RTS</th>
                     <th>RWH</th>
                     <th>UI</th>
+                    <th>Schedule</th>
                 </tr>
             </thead>
             <tbody>
@@ -47,10 +47,11 @@
                             {{user.contact.velocities[i].velocity}}
                         </label>
                     </td>
+                    <td></td>
                 </tr>
             </tbody>
         </table>
-        <br/><br/>
+        <br/>
     </div>
 
     <div style='width:75%'>
