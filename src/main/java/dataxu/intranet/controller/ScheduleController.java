@@ -1,6 +1,8 @@
 package dataxu.intranet.controller;
 
 import java.util.Collections;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -35,7 +37,7 @@ public class ScheduleController {
     @RequestMapping(value = "/api/users/{id}/schedules", method = RequestMethod.POST)
     @ResponseBody
     public List<ContactSchedule> updateSchedules(@PathVariable("id") Integer contactId,
-            @RequestBody List<ContactSchedule> schedules) {
+            @RequestBody List<ContactSchedule> schedules, Date startDate, Date endDate) {
         List<ContactSchedule> existing = contactScheduleRepository.findByContactId(contactId);
         Set<Integer> ids = Sets.newHashSet();
         for (ContactSchedule s : schedules) {
@@ -53,6 +55,15 @@ public class ScheduleController {
         }
 
         List<ContactSchedule> result = contactScheduleRepository.save(schedules);
+
+        if (startDate != null && endDate != null) {
+            for (Iterator<ContactSchedule> itr = result.iterator(); itr.hasNext();) {
+                ContactSchedule cs = itr.next();
+                if (cs.getStartDate().after(endDate) || cs.getEndDate().before(startDate)) {
+                    itr.remove();
+                }
+            }
+        }
 
         return result;
     }
