@@ -48,7 +48,7 @@ CREATE TABLE contact_schedule (
     contact_id int NOT NULL REFERENCES contact(id),
     start_date date NOT NULL,
     end_date date NOT NULL,
-    reason varchar(255) NOT NULL,
+    reason varchar(255),
     CONSTRAINT unx_contact_dates UNIQUE(contact_id, start_date, end_date)
 );
 
