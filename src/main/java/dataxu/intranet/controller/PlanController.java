@@ -227,7 +227,7 @@ public class PlanController {
 
     @RequestMapping(value = "/api/plans/{id}/schedules", method = RequestMethod.GET)
     @ResponseBody
-    public ScheduleChartDataSet getPlanSchedules(@PathVariable("id") Integer planId) {
+    public ScheduleChartDataSet getPlanSchedules(@PathVariable("id") Integer planId, String chartType) {
         Plan plan = planRepository.findOne(planId);
         List<PlanContact> contacts = plan.getPlanContacts();
 
@@ -300,8 +300,15 @@ public class PlanController {
             }
         }
 
+        boolean accumulated = "accumulated".equals(chartType);
         for (Map.Entry<Integer, Map<Date, Double>> entry : resultChapterVelocities.entrySet()) {
-            List<Double> data = accumulateList(entry.getValue().values());
+            List<Double> data;
+            if (accumulated) {
+                data = accumulateList(entry.getValue().values());
+            } else {
+                data = Lists.newArrayList(entry.getValue().values());
+            }
+
             List<Double> realData = Lists.newArrayList();
             // now divided by 10
             for (Double d : data) {
@@ -311,8 +318,6 @@ public class PlanController {
             dataSet.add(new ScheduleChartData(CHAPTERS.get(entry.getKey()), realData));
         }
 
-        // ScheduleChartData // ScheduleChartData(String chapterName,
-        // List<Double> data) {
         return new ScheduleChartDataSet(Lists.newArrayList(resultWorkingDays), dataSet);
     }
 

@@ -51,12 +51,13 @@
         </span>
         </span>
     </div>
-    <div style='width:600px; position:absolute'>    
+    <div style='width:1000px; position:absolute'>    
         <span ng-show='showChartSettings'>
         <form class='form-inline'>
             <div class="form-group">
                 Width: <input type="input" class="form-control" id="chartWidth" ng-model='chartWidth' placeholder="Chart Width">
                 Height: <input type="input" class="form-control" id="chartHeight" ng-model='chartHeight' placeholder="Chart Height">
+                Chart Type: <select ng-model='chartType' class="form-control btn-mini"  ng-options='o as o for o in chartTypes'/>
                 <a ng-click='updateChart()' class='btn btn-sm btn-default'>update</a>
             </div>
         </form>

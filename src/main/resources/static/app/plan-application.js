@@ -149,6 +149,8 @@ planApp.controller('PlanScheduleController', ['$scope', '$location', '$routePara
     $scope.showDetails = false;
     $scope.detailToggleText = 'Show Plan Details';
     $scope.showChartSettings = false;
+    $scope.chartTypes = ['accumulated', 'normal'];
+    $scope.chartType = 'accumulated';
 
     
     var colors = ["orange", "green", "grey", "red", "pink", "black", "yello", "purple"];
@@ -162,7 +164,7 @@ planApp.controller('PlanScheduleController', ['$scope', '$location', '$routePara
     }
     
     $scope.updateScheduleChart = function(update) {
-        $scope.schedules = PlanSchedules.get({id: $routeParams.id}, function() {
+        $scope.schedules = PlanSchedules.get({id: $routeParams.id, chartType: $scope.chartType}, function() {
             $scope.legend = [];
             var dataSet = [];
             for (var i = 0; i < $scope.schedules.data_set.length; i++) {
