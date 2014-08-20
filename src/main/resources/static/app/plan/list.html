@@ -1,4 +1,4 @@
-<h2>Plan List</h2>
+<h1>Plan List</h1>
 <table class="table table-condensed">
     <thead>
         <tr>
@@ -21,9 +21,9 @@
         <td>{{plan.end_date | date: 'MM/dd/yyyy'}}</td>
         <td>{{plan.created_on | date:'medium'}}</td>
         <td>{{plan.updated_on | date:'medium'}}</td>
-        <td nowrap><a ng-click='showSchedule(plan.id)' class='btn btn-small btn-primary'>schedule</a>&nbsp;
-         <a ng-click='deletePlan(plan.id)' class='btn btn-small btn-danger'>delete</a></td>
+        <td nowrap><a ng-click='showSchedule(plan.id)' class='btn btn-xs btn-primary'>schedule</a>&nbsp;
+         <a ng-click='deletePlan(plan.id)' class='btn btn-xs btn-danger'>delete</a></td>
     </tr>
     </tbody>
 </table>
-<a ng-click='createNewPlan()' class='btn btn-small btn-primary'>Create New Plan</a>
+<a ng-click='createNewPlan()' class='btn btn-xs btn-primary'>Create New Plan</a>

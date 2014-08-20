@@ -1,7 +1,7 @@
 <div>
-    <h2>
+    <h1>
         <a href='#/'>Plan List</a> &gt; <a href='#/detail/{{plan.id}}'>{{plan.name}}</a> &gt; Schedule
-    </h2>
+    </h1>
      
     <div ng-show='showDetails'>
         <a href='javascript:void(0);' ng-click='toggleDetails()'>{{detailToggleText}}</a>
@@ -65,7 +65,7 @@
             <div class="form-group">
                 Width: <input type="input" class="form-control" id="chartWidth" ng-model='chartWidth' placeholder="Chart Width">
                 Height: <input type="input" class="form-control" id="chartHeight" ng-model='chartHeight' placeholder="Chart Height">
-                <a ng-click='updateChart()' class='btn btn-small btn-default'>update</a>
+                <a ng-click='updateChart()' class='btn btn-xs btn-default'>update</a>
             </div>
         </form>
         </span>

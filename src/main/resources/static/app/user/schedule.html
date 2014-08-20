@@ -1,8 +1,8 @@
 <div>
-    <h2>
+    <h1>
         <a href='#/users/list'>User List</a> &gt; <a href='#/users/detail/{{user.id}}'>{{user.first_name}}
             {{user.last_name}}</a> &gt; Schedule
-    </h2>
+    </h1>
 
     <table style='width:100%'>
          <thead>
@@ -18,18 +18,18 @@
             <td><input type="text" class="form-control" datepicker-popup="MM/dd/yyyy" ng-model="schedule.start_date" ng-required="true" close-text="Close" /></td>
             <td><input type="text" class="form-control" datepicker-popup="MM/dd/yyyy" ng-model="schedule.end_date" ng-required="true" close-text="Close" /></td>
             <td><input ng-model='schedule.reason' style='width: 100%'></input></td>
-            <td><a ng-click='deleteSchedule(schedule.id)' class='btn btn-small btn-danger'>delete</a></td>
+            <td><a ng-click='deleteSchedule(schedule.id)' class='btn btn-xs btn-danger'>delete</a></td>
         </tr>
         </tbody>
     </table>
     <div class='control-group'>
-        <a ng-click='addNewSchedule()' class='btn btn-small btn-default'>Add New</a>&nbsp;
-        <a ng-click='sortSchedules()' class='btn btn-small btn-default'>Reorder</a>
+        <a ng-click='addNewSchedule()' class='btn btn-xs btn-default'>Add New</a>&nbsp;
+        <a ng-click='sortSchedules()' class='btn btn-xs btn-default'>Reorder</a>
     </div>
     <div class='control-group'>
         <div class='center buttons'>
-            <a ng-click='cancel()' class='btn btn-small btn-primary'>Cancel</a>
-            <a ng-click='updateSchedule()' class='btn btn-small btn-primary'>Update Schedule</a>
+            <a ng-click='cancel()' class='btn btn-xs btn-primary'>Cancel</a>
+            <a ng-click='updateSchedule()' class='btn btn-xs btn-primary'>Update Schedule</a>
         </div>
     </div>
 </div>

@@ -1,4 +1,4 @@
-<h2>User List</h2>
+<h1>User List</h1>
 <table class="table table-condensed">
     <thead>
         <tr>
@@ -16,10 +16,10 @@
         <td>{{user.created_on | date:'medium'}}</td>
         <td>{{user.updated_on | date:'medium'}}</td>
         <td nowrap>
-            <a ng-click='editUserSchedule(user.id)' class='btn btn-small btn-primary'>schedule</a>&nbsp;
-            <a ng-click='deleteUser(user.id)' class='btn btn-small btn-danger'>delete</a>
+            <a ng-click='editUserSchedule(user.id)' class='btn btn-xs btn-primary'>schedule</a>&nbsp;
+            <a ng-click='deleteUser(user.id)' class='btn btn-xs btn-danger'>delete</a>
         </td>
     </tr>
     </tbody>
 </table>
-<a ng-click='createNewUser()' class='btn btn-small btn-primary'>Create New User</a>
+<a ng-click='createNewUser()' class='btn btn-xs btn-primary'>Create New User</a>
