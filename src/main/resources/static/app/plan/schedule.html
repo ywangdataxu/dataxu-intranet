@@ -6,9 +6,20 @@
     <div ng-show='showDetails'>
         <a href='javascript:void(0);' ng-click='toggleDetails()'>{{detailToggleText}}</a>
         <br/><br/>
-        <div>
-            <b>Start</b>: {{plan.start_date | date:'MM/dd/yyyy'}} <b>End</b>: {{plan.end_date | date:'MM/dd/yyyy'}}
-        </div>
+        <table style='border:0px'>
+            <tr style='background-color: transparent;'>
+                <td>Start Date</td>
+                <td>
+                    <input ng-change='updateSchedule()' type="text" class="form-control" datepicker-popup="MM/dd/yyyy" ng-model="plan.start_date" ng-required="true" close-text="Close" />
+                </td>
+                <td>End Date</td>
+                <td>
+                    <input ng-change='updateSchedule()' type="text" class="form-control" datepicker-popup="MM/dd/yyyy" ng-model="plan.end_date" ng-required="true" close-text="Close" />
+                </td>
+                <td>Maintenance Allowance</td>
+                <td><select ng-change='updateSchedule()' ng-model='plan.maintenance_allowance' id='maintenanceAllowance' ng-options='item.value as item.name for item in allowances'/></td>
+            </tr>
+        </table>
         <table style='width: 80%'>
             <thead>
                 <tr>

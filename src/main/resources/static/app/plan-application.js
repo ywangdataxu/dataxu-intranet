@@ -155,7 +155,10 @@ planApp.controller('PlanScheduleController', ['$scope', '$location', '$routePara
     $scope.showChartSettings = false;
     $scope.chartTypes = ['accumulated', 'normal'];
     $scope.chartType = 'accumulated';
-
+    $scope.allowances = [];
+    for (var i = 0; i <= 100; i++) {
+        $scope.allowances[i] = {name: i + '%', value: i};
+    }
     
     var colors = ["orange", "green", "grey", "red", "pink", "black", "yello", "purple"];
     var ctx = document.getElementById("myChart").getContext("2d");
