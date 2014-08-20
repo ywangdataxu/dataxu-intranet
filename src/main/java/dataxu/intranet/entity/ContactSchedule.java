@@ -73,12 +73,12 @@ public class ContactSchedule implements Comparable<ContactSchedule> {
 
     @Override
     public int compareTo(ContactSchedule o) {
-        int result = this.id.compareTo(o.id);
+        int result = this.startDate.before(o.endDate) ? -1 : 1;
         if (result == 0) {
-            result = this.startDate.compareTo(o.startDate);
+            result = this.endDate.before(o.endDate) ? -1 : 1;
         }
 
-        return -result;
+        return result;
     }
 
     public Date getStartDate() {

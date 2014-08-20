@@ -23,31 +23,44 @@
                 <tr>
                     <th>Name</th>
                     <th>Email</th>
+                    <th>Schedule</th>
                     <th colspan='4' style='text-align: center'>Chapter Velocities</th>
-                    <th></th>
                 </tr>
                 <tr>
+                    <th></th>
                     <th></th>
                     <th></th>
                     <th>LS</th>
                     <th>RTS</th>
                     <th>RWH</th>
                     <th>UI</th>
-                    <th>Schedule</th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat='user in plan.plan_contacts'>
                     <td><a href='#/users/detail/{{user.contact.id}}'>{{user.contact.first_name}}
                             {{user.contact.last_name}}</a></td>
-                    <td>{{user.contact.email}}</td>
+                    <td>
+                        {{user.contact.email}}
+                    </td>
+                    <td>
+                        <a ng-click='showUserSchedule(user.contact.id)'>show schedule</a>
+                        <div style='position:absolute;border:1px solid grey; width:300px; margin:10px;' ng-show='userSchedule(user.contact.id)'>
+                            <form style='border:1px solid gren;background:white;'>
+                                <div ng-show='currUserSchedule.length == 0'>No Schedules</div>
+                                <div ng-repeat='u in currUserSchedule'>
+                                    {{u.start_date | date: 'MM/dd/yyyy'}} - {{u.end_date | date: 'MM/dd/yyyy'}}: {{u.reason}}
+                                </div>
+                                <a ng-click='showUserSchedule(-1)' class='btn btn-xs btn-primary' style='margin-top:10px'>close</a>
+                            </form>
+                        </div>
+                    </td>
                     <td ng-repeat='i in [0, 1, 2, 3]'>
                         <label class='radio inline'>
                             <input type='radio' ng-change='updateSchedule()' name='contact_chapter_{{user.contact.id}}' value='{{i + 1}}' ng-model='user.chapter_id' data-ng-disabled='user.contact.velocities[i].velocity == 0'>
                             {{user.contact.velocities[i].velocity}}
                         </label>
                     </td>
-                    <td></td>
                 </tr>
             </tbody>
         </table>

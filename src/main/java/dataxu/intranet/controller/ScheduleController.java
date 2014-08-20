@@ -18,17 +18,36 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import dataxu.intranet.entity.ContactSchedule;
+import dataxu.intranet.entity.Plan;
 import dataxu.intranet.repository.ContactScheduleRepository;
+import dataxu.intranet.repository.PlanRepository;
 
 @Controller
 public class ScheduleController {
     @Autowired
     private ContactScheduleRepository contactScheduleRepository;
 
+    @Autowired
+    private PlanRepository planRepository;
+
     @RequestMapping(value = "/api/users/{id}/schedules", method = RequestMethod.GET)
     @ResponseBody
-    public List<ContactSchedule> getSchedules(@PathVariable("id") Integer contactId) {
+    public List<ContactSchedule> getSchedules(@PathVariable("id") Integer contactId, Integer planId) {
         List<ContactSchedule> result = contactScheduleRepository.findByContactId(contactId);
+
+        if (planId != null) {
+            Plan plan = planRepository.findOne(planId);
+            Date endDate = plan.getEndDate();
+            Date startDate = plan.getStartDate();
+
+            for (Iterator<ContactSchedule> itr = result.iterator(); itr.hasNext();) {
+                ContactSchedule cs = itr.next();
+                if (cs.getStartDate().after(endDate) || cs.getEndDate().before(startDate)) {
+                    itr.remove();
+                }
+            }
+        }
+
         Collections.sort(result);
 
         return result;
@@ -37,7 +56,7 @@ public class ScheduleController {
     @RequestMapping(value = "/api/users/{id}/schedules", method = RequestMethod.POST)
     @ResponseBody
     public List<ContactSchedule> updateSchedules(@PathVariable("id") Integer contactId,
-            @RequestBody List<ContactSchedule> schedules, Date startDate, Date endDate) {
+            @RequestBody List<ContactSchedule> schedules) {
         List<ContactSchedule> existing = contactScheduleRepository.findByContactId(contactId);
         Set<Integer> ids = Sets.newHashSet();
         for (ContactSchedule s : schedules) {
@@ -55,15 +74,6 @@ public class ScheduleController {
         }
 
         List<ContactSchedule> result = contactScheduleRepository.save(schedules);
-
-        if (startDate != null && endDate != null) {
-            for (Iterator<ContactSchedule> itr = result.iterator(); itr.hasNext();) {
-                ContactSchedule cs = itr.next();
-                if (cs.getStartDate().after(endDate) || cs.getEndDate().before(startDate)) {
-                    itr.remove();
-                }
-            }
-        }
 
         return result;
     }

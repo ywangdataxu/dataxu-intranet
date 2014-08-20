@@ -141,8 +141,8 @@ planApp.controller('PlanDetailController', ['$scope', '$location', '$routeParams
     }
 }]);
 
-planApp.controller('PlanScheduleController', ['$scope', '$location', '$routeParams', 'Plan', 'Users', 'PlanSchedules',
-                                              function($scope, $location, $routeParams, Plan, Users, PlanSchedules) {
+planApp.controller('PlanScheduleController', ['$scope', '$location', '$routeParams', 'Plan', 'Users', 'PlanSchedules', 'UserSchedules',
+                                              function($scope, $location, $routeParams, Plan, Users, PlanSchedules, UserSchedules) {
     $scope.chartWidth = 1200;
     $scope.chartHeight = 300;
     $scope.plan = Plan.show({id: $routeParams.id});
@@ -155,6 +155,8 @@ planApp.controller('PlanScheduleController', ['$scope', '$location', '$routePara
     $scope.showChartSettings = false;
     $scope.chartTypes = ['accumulated', 'normal'];
     $scope.chartType = 'accumulated';
+    $scope.currUserId = -1;
+    $scope.currUserSchedule;
     $scope.allowances = [];
     for (var i = 0; i <= 100; i++) {
         $scope.allowances[i] = {name: i + '%', value: i};
@@ -212,6 +214,18 @@ planApp.controller('PlanScheduleController', ['$scope', '$location', '$routePara
         $scope.chartHeight = $('#chartHeight').val();
         $scope.showChartSettings = false;
         $scope.updateSchedule();
+    }
+    
+    $scope.showUserSchedule = function(userId) {
+        $scope.currUserId = userId;
+        
+        if ($scope.currUserId != -1) {
+            $scope.currUserSchedule = UserSchedules.query({id: userId, planId: $scope.plan.id});
+        }
+    }
+    
+    $scope.userSchedule = function(userId) {
+        return $scope.currUserId == userId;
     }
 }]);
 
