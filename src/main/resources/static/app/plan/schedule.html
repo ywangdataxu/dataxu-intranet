@@ -14,7 +14,7 @@
                 <td>
                     <input ng-change='updateSchedule()' type="text" class="form-control" datepicker-popup="MM/dd/yyyy" ng-model="plan.end_date" ng-required="true" close-text="Close" />
                 </td>
-                <td>Maintenance Allowance</td>
+                <td>Maintenance</td>
                 <td><select ng-change='updateSchedule()' ng-model='plan.maintenance_allowance' id='maintenanceAllowance' ng-options='item.value as item.name for item in allowances'/></td>
             </tr>
         </table>
