@@ -180,7 +180,7 @@ planApp.controller('PlanScheduleController', ['$scope', '$location', '$routePara
                 $scope.legend.push({name: $scope.schedules.data_set[i].chapter_name, color: colors[i % colors.length]});
                 
                 for (var j = 0; j < $scope.schedules.data_set[i].data.length; j++) {
-                    $scope.schedules.data_set[i].data[j] = $scope.schedules.data_set[i].data[j].toFixed(2);
+                    $scope.schedules.data_set[i].data[j] = $scope.schedules.data_set[i].data[j].toFixed(1);
                 }
                 
                 dataSet.push({
