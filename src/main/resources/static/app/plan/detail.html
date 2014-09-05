@@ -1,11 +1,11 @@
 <div>
     <h2><a href='#/'>Plan List</a> &gt; {{plan.name}}</h2>
 
-    <form class='form-horizontal'>
+    <form class='form-horizontal' name='form' ng-submit='updatePlan()'>
         <div class='control-group'>
             <label class='col-sm-2 control-label' for='name'>Plan Name</label>
             <div class='controls'>
-                <input type='text' id='name' ng-model='plan.name' class='input-normal' style='width:80%'/>
+                <input type='text' id='name' ng-model='plan.name' class='input-normal' style='width:80%' required />
             </div>
         </div>
         <div class='control-group'>
@@ -20,13 +20,13 @@
                 <tr style='background-color: transparent;'>
                     <td>Start Date</td>
                     <td>
-                        <input type="text" class="form-control" datepicker-popup="MM/dd/yyyy" ng-model="plan.start_date" ng-required="true" close-text="Close" />
+                        <input type="text" class="form-control" datepicker-popup="MM/dd/yyyy" ng-model="plan.start_date" ng-required="true" close-text="Close" required />
                     </td>
                 </tr>
                 <tr style='background-color: transparent;'>
                     <td>End Date</td>
                     <td>
-                        <input type="text" class="form-control" datepicker-popup="MM/dd/yyyy" ng-model="plan.end_date" ng-required="true" close-text="Close" />
+                        <input type="text" class="form-control" datepicker-popup="MM/dd/yyyy" ng-model="plan.end_date" ng-required="true" close-text="Close" required />
                     </td>
                 </tr>
             </table>
@@ -34,7 +34,7 @@
         <div class='control-group'>
             <label class='col-sm-2 control-label' for='maintenanceAllowance'>Maintenance</label>
             <div class='controls'>
-                <select ng-model='plan.maintenance_allowance' id='maintenanceAllowance' ng-options='item.value as item.name for item in allowances'/>
+                <select ng-model='plan.maintenance_allowance' id='maintenanceAllowance' ng-options='item.value as item.name for item in allowances' required />
             </div>
         </div>
         <div class='control-group'>
@@ -97,7 +97,7 @@
         <div class='control-group'>
             <div class='center buttons'>
                 <a ng-click='cancel()' class='btn btn-sm btn-primary'>Cancel</a>
-                <a ng-click='updatePlan()' class='btn btn-sm btn-primary'>Update Plan</a>
+                <a ng-click='updatePlan()' class='btn btn-sm btn-primary' ng-disabled='form.$invalid'>Update Plan</a>
             </div>
         </div>
     </form>
