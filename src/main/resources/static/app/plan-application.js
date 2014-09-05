@@ -178,6 +178,11 @@ planApp.controller('PlanScheduleController', ['$scope', '$location', '$routePara
             var dataSet = [];
             for (var i = 0; i < $scope.schedules.data_set.length; i++) {
                 $scope.legend.push({name: $scope.schedules.data_set[i].chapter_name, color: colors[i % colors.length]});
+                
+                for (var j = 0; j < $scope.schedules.data_set[i].data.length; j++) {
+                    $scope.schedules.data_set[i].data[j] = $scope.schedules.data_set[i].data[j].toFixed(2);
+                }
+                
                 dataSet.push({
                         fillColor: colors[i % colors.length],
                         data: $scope.schedules.data_set[i].data
@@ -190,6 +195,7 @@ planApp.controller('PlanScheduleController', ['$scope', '$location', '$routePara
            
             ctx.canvas.width = $scope.chartWidth;
             ctx.canvas.height = $scope.chartHeight;
+            
             $scope.myChart = new Chart(ctx).Bar($scope.data);
         });
     }
