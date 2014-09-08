@@ -63,7 +63,7 @@ planApp.controller('HeaderController', ['$scope', '$location', function($scope, 
     }
 }]);
 
-planApp.controller('PlanListController', ['$scope', '$location', 'Plans', function($scope, $location, Plans) {
+planApp.controller('PlanListController', ['$scope', '$location', '$window', 'Plans', function($scope, $location, $window, Plans) {
     $scope.plans = Plans.query(); 
     
     $scope.editPlan = function(planId) {
@@ -71,9 +71,12 @@ planApp.controller('PlanListController', ['$scope', '$location', 'Plans', functi
     }
     
     $scope.deletePlan = function(planId) {
-        Plans.delete({id: planId}, function() {
-            $scope.plans = Plans.query();
-        });
+        var deletePlan = $window.confirm('Are you sure you want to delete this plan?');   
+        if (deletePlan) {
+            Plans.delete({id: planId}, function() {
+                $scope.plans = Plans.query();
+            });
+        }
     }
     
     $scope.createNewPlan = function() {
@@ -266,7 +269,7 @@ planApp.controller('CreatePlanController', ['$scope', '$location', '$routeParams
 }]);
 
 
-planApp.controller('UserListController', ['$scope', '$location', 'Users', function($scope, $location, Users) {
+planApp.controller('UserListController', ['$scope', '$location', '$window', 'Users', function($scope, $location, $window, Users) {
     $scope.users = Users.query(); 
     
     $scope.editUser = function(userId) {
@@ -278,8 +281,11 @@ planApp.controller('UserListController', ['$scope', '$location', 'Users', functi
     }
     
     $scope.deleteUser = function(userId) {
-        Users.delete({id: userId});
-        $scope.users = Users.query();
+        var deleteUser = $window.confirm('Are you sure you want to delete this user?');   
+        if (deleteUser) {
+            Users.delete({id: userId});
+            $scope.users = Users.query();
+        }
     }
     
     $scope.createNewUser = function() {
