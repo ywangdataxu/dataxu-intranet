@@ -108,6 +108,18 @@ planApp.controller('PlanDetailController', ['$scope', '$location', '$routeParams
             var checked = document.getElementById('user_id_' + currUser.id).checked;
             if (checked) {
                 var chapterId =  $("input[type='radio'][name='contact_chapter_" + currUser.id + "']:checked").val();
+                if (!chapterId) {
+                    alert("Please select chapter for " + currUser.first_name + " " + currUser.last_name);
+                    return false;
+                }
+            }
+        }
+
+        for (var i = 0; i < $scope.users.length; i++) {
+            var currUser = $scope.users[i];
+            var checked = document.getElementById('user_id_' + currUser.id).checked;
+            if (checked) {
+                var chapterId =  $("input[type='radio'][name='contact_chapter_" + currUser.id + "']:checked").val();
                 $scope.plan.plan_contacts.push({contact:currUser, chapter_id: chapterId, plan_id: $scope.plan.id});
             }
         }
