@@ -32,7 +32,7 @@ public class PlanContact implements Comparable<PlanContact> {
         this.planId = planId;
     }
 
-    @OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
+    @OneToOne(cascade = { CascadeType.DETACH }, fetch = FetchType.EAGER)
     @JoinColumn(name = "contact_id", nullable = false)
     private Contact contact;
 

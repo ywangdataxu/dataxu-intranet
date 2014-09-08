@@ -172,6 +172,11 @@ public class PlanController {
     public void deletePlan(Integer id) {
         Plan p = planRepository.findOne(id);
 
+        if (!p.getPlanContacts().isEmpty()) {
+            planContactRepository.deleteInBatch(p.getPlanContacts());
+        }
+
+        p.setPlanContacts(Sets.newHashSet());
         planRepository.delete(p);
     }
 
