@@ -71,8 +71,9 @@ planApp.controller('PlanListController', ['$scope', '$location', 'Plans', functi
     }
     
     $scope.deletePlan = function(planId) {
-        Plans.delete({id: planId});
-        $scope.plans = Plans.query();
+        Plans.delete({id: planId}, function() {
+            $scope.plans = Plans.query();
+        });
     }
     
     $scope.createNewPlan = function() {

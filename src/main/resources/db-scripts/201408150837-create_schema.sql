@@ -1,9 +1,9 @@
 BEGIN;
 
-DROP SCHEMA IF EXISTS dxcrs CASCADE;
+DROP SCHEMA IF EXISTS dxintranet CASCADE;
 
-CREATE SCHEMA dxcrs;
+CREATE SCHEMA dxintranet;
 
-ALTER USER dxcrs SET search_path = dxcrs;
+ALTER USER dxintranet SET search_path = dxintranet;
 
 END;

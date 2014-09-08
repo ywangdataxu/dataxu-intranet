@@ -170,7 +170,9 @@ public class PlanController {
     @RequestMapping(value = "/api/plans", method = RequestMethod.DELETE)
     @ResponseBody
     public void deletePlan(Integer id) {
-        planRepository.delete(id);
+        Plan p = planRepository.findOne(id);
+
+        planRepository.delete(p);
     }
 
     private List<Date> getAllMondays(Iterable<Date> src) {
