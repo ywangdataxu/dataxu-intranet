@@ -62,10 +62,10 @@
                     <tbody>
                     <tr ng-repeat='user in plan.plan_contacts'>
                         <td style='width: 20px'>
-                            <input type='checkbox' checked='checked' id='user_id_{{user.contact.id}}'></input>
+                            <input type='checkbox' checked='checked' id='user_id_{{user.contact.id}}' value='{{user.contact.id}}'></input>
                         </td>
                         <td>
-                            <a href='#/users/detail/{{user.contact.id}}'>{{user.contact.first_name}} {{user.contact.last_name}}</a>
+                            <a href='#/users/detail/{{user.contact.id}}' id='user_name_{{user.contact.id}}'>{{user.contact.first_name}} {{user.contact.last_name}}</a>
                         </td>
                         <td>{{user.contact.email}}</td>
                         <td ng-repeat='i in [0, 1, 2, 3]'>
@@ -77,10 +77,10 @@
                     </tr>
                     <tr ng-repeat='user in users'>
                         <td style='width: 20px'>
-                            <input type='checkbox' id='user_id_{{user.id}}'></input>
+                            <input type='checkbox' id='user_id_{{user.id}}' value='{{user.id}}'></input>
                         </td>
                         <td>
-                            <a href='#/users/detail/{{user.id}}'>{{user.first_name}} {{user.last_name}}</a>
+                            <a href='#/users/detail/{{user.id}}' id='user_name_{{user.id}}'>{{user.first_name}} {{user.last_name}}</a>
                         </td>
                         <td>{{user.email}}</td>
                         <td ng-repeat='i in [0, 1, 2 ,3]'>
