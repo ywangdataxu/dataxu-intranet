@@ -1,5 +1,6 @@
 package dataxu.intranet.controller;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -7,6 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import au.com.bytecode.opencsv.CSVWriter;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -30,6 +36,8 @@ import dataxu.intranet.repository.PlanRepository;
 
 @Controller
 public class PlanController {
+    private static final String CHART_TYPE_ACCUMULATED = "accumulated";
+
     public static class ChapterSchedule {
         private final Integer chapterId;
         private final List<PlanSchedule> planSchedules;
@@ -232,6 +240,46 @@ public class PlanController {
         return plans;
     }
 
+    @RequestMapping(value = "/api/plans/{id}/schedules/download/{chartType}", method = RequestMethod.GET)
+    public void downloadSchedules(@PathVariable("id") Integer planId, @PathVariable("chartType") String chartType,
+            HttpServletResponse response) {
+        ScheduleChartDataSet set = getPlanSchedules(planId, chartType);
+
+        Plan p = planRepository.findOne(planId);
+
+        String headerKey = "Content-Disposition";
+        String headerValue = String.format("attachment; filename=\"%s\"", p.getName() + ".csv");
+        response.setContentType("text/csv");
+        response.setHeader(headerKey, headerValue);
+
+        CSVWriter writer = null;
+        try {
+            writer = new CSVWriter(response.getWriter(), ',');
+
+            List<String> dates = Lists.newArrayList("Chapter/Date");
+            dates.addAll(set.getDates());
+            writer.writeNext(dates.toArray(new String[0]));
+
+            List<ScheduleChartData> data = set.getDataSet();
+
+            for (ScheduleChartData d : data) {
+                String chapterName = d.getChapterName();
+                List<Double> values = d.getData();
+
+                List<String> line = Lists.newArrayList(chapterName);
+                for (Double v : values) {
+                    line.add(String.format("%1$.1f", v));
+                }
+
+                writer.writeNext(line.toArray(new String[0]));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            IOUtils.closeQuietly(writer);
+        }
+    }
+
     @RequestMapping(value = "/api/plans/{id}/schedules", method = RequestMethod.GET)
     @ResponseBody
     public ScheduleChartDataSet getPlanSchedules(@PathVariable("id") Integer planId, String chartType) {
@@ -307,7 +355,7 @@ public class PlanController {
             }
         }
 
-        boolean accumulated = "accumulated".equals(chartType);
+        boolean accumulated = CHART_TYPE_ACCUMULATED.equals(chartType);
         for (Map.Entry<Integer, Map<Date, Double>> entry : resultChapterVelocities.entrySet()) {
             List<Double> data;
             if (accumulated) {

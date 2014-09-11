@@ -64,7 +64,8 @@
 
     <div style='width:75%'>
         <a href='javascript:void(0);' ng-click='toggleDetails()'>{{detailToggleText}}</a>&nbsp;&nbsp;
-        <a href='javascript:void(0);' ng-click='toggleChartSettings()'>Customize Chart</a>
+        <a href='javascript:void(0);' ng-click='toggleChartSettings()'>Customize Chart</a>&nbsp;&nbsp;
+        <a href='api/plans/{{plan.id}}/schedules/download/{{chartType}}'>Download</a>
         <span style='float:right'>
         <span ng-repeat='l in legend'> <span style='background: {{l.color}}'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
             {{l.name}}&nbsp;&nbsp;&nbsp;
