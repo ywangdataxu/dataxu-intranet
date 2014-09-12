@@ -311,7 +311,7 @@ planApp.controller('UserDetailController', ['$scope', '$location', '$routeParams
     }
 }]);
 
-planApp.controller('UserScheduleController', ['$scope', '$location', '$routeParams', 'User', 'UserSchedules', function($scope, $location, $routeParams, User, UserSchedules) {
+planApp.controller('UserScheduleController', ['$scope', '$location', '$routeParams', '$window', 'User', 'UserSchedules', function($scope, $location, $routeParams, $window, User, UserSchedules) {
     $scope.user = User.show({id: $routeParams.id});
     $scope.schedules = UserSchedules.query({id: $routeParams.id});
     var scheduleComparator = function(a, b) {
@@ -346,6 +346,13 @@ planApp.controller('UserScheduleController', ['$scope', '$location', '$routePara
     }
     
     $scope.updateSchedule = function() {
+        for (var i = 0; i < $scope.schedules.length; i++) {
+            if (new Date($scope.schedules[i].start_date) > new Date($scope.schedules[i].end_date)) {
+                $window.alert($scope.schedules[i].reason + " start date is greater than the end date");
+                return;
+            }
+        }
+        
         UserSchedules.update({id: $scope.user.id}, $scope.schedules);
         $location.path('/users');
     }
