@@ -2,7 +2,14 @@
     <h2>
         <a href='#/'>Plan List</a> &gt; <a href='#/detail/{{plan.id}}'>{{plan.name}}</a> &gt; Schedule
     </h2>
-     
+
+    <div style='width:75%'>
+        [ <a href='javascript:void(0);' ng-click='toggleDetails()'>{{detailToggleText}}</a> ] 
+        [ <a href='javascript:void(0);' ng-click='toggleChartSettings()'>Customize Chart</a> ] 
+        [ <a href='api/plans/{{plan.id}}/schedules/download/{{chartType}}'>Download Plan</a> ]
+        [ <a href='api/plans/{{plan.id}}/teammember/schedules/download/{{chartType}}'>Download Team Member Schedule</a> ]
+    </div>
+         
     <div ng-show='showDetails'>
         <table style='border:0px'>
             <tr style='background-color: transparent;'>
@@ -62,16 +69,6 @@
         <br/>
     </div>
 
-    <div style='width:75%'>
-        <a href='javascript:void(0);' ng-click='toggleDetails()'>{{detailToggleText}}</a>&nbsp;&nbsp;
-        <a href='javascript:void(0);' ng-click='toggleChartSettings()'>Customize Chart</a>&nbsp;&nbsp;
-        <a href='api/plans/{{plan.id}}/schedules/download/{{chartType}}'>Download</a>
-        <span style='float:right'>
-        <span ng-repeat='l in legend'> <span style='background: {{l.color}}'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-            {{l.name}}&nbsp;&nbsp;&nbsp;
-        </span>
-        </span>
-    </div>
     <div style='width:1000px; position:absolute'>    
         <span ng-show='showChartSettings'>
         <form class='form-inline'>
@@ -82,6 +79,13 @@
                 <a ng-click='updateChart()' class='btn btn-sm btn-default'>update</a>
             </div>
         </form>
+        </span>
+    </div>
+    <div style='width:75%'>
+            <span style='float:right'>
+        <span ng-repeat='l in legend'> <span style='background: {{l.color}}'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            {{l.name}}&nbsp;&nbsp;&nbsp;
+        </span>
         </span>
     </div>
     <canvas id='myChart'></</canvas>

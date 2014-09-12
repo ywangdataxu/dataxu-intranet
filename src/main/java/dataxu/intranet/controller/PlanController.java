@@ -280,6 +280,51 @@ public class PlanController {
         }
     }
 
+    @RequestMapping(value = "/api/plans/{id}/teammember/schedules/download", method = RequestMethod.GET)
+    public void downloadTeamMemberSchedules(@PathVariable("id") Integer planId,
+            @PathVariable("chartType") String chartType, HttpServletResponse response) {
+        Plan plan = planRepository.findOne(planId);
+        List<PlanContact> contacts = plan.getPlanContacts();
+
+        Map<String, List<ContactSchedule>> contactSchedules = Maps.newHashMap();
+
+        for (PlanContact c : contacts) {
+            // determine the velocity
+            Integer chapterId = c.getChapterId();
+
+            Double velocity = 0D;
+            List<ContactVelocity> velocities = c.getContact().getVelocities();
+            for (ContactVelocity v : velocities) {
+                if (v.getChapter().getId() == chapterId) {
+                    velocity = v.getVelocity();
+                    break;
+                }
+            }
+
+            if (velocity == 0) {
+                continue;
+            }
+
+            List<ContactSchedule> filtered = getContactSchedule(c, plan);
+            contactSchedules.put(c.getContact().getFirstName() + " " + c.getContact().getLastName(), filtered);
+        }
+
+        String headerKey = "Content-Disposition";
+        String headerValue = String.format("attachment; filename=\"%s\"", plan.getName() + " team member schedule.csv");
+        response.setContentType("text/csv");
+        response.setHeader(headerKey, headerValue);
+
+        CSVWriter writer = null;
+        try {
+            writer = new CSVWriter(response.getWriter(), ',');
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            IOUtils.closeQuietly(writer);
+        }
+    }
+
     @RequestMapping(value = "/api/plans/{id}/schedules", method = RequestMethod.GET)
     @ResponseBody
     public ScheduleChartDataSet getPlanSchedules(@PathVariable("id") Integer planId, String chartType) {
@@ -305,15 +350,7 @@ public class PlanController {
                 continue;
             }
 
-            List<ContactSchedule> s = contactScheduleRepository.findByContactId(c.getContact().getId());
-            List<ContactSchedule> filtered = Lists.newArrayList();
-
-            for (ContactSchedule cs : s) {
-                ContactSchedule newSchedule = updateScheduleBaseOnPlan(plan, cs);
-                if (newSchedule != null) {
-                    filtered.add(newSchedule);
-                }
-            }
+            List<ContactSchedule> filtered = getContactSchedule(c, plan);
 
             Map<Date, Double> contactVelocities = getVelocities(velocity, filtered, plan);
 
@@ -374,6 +411,20 @@ public class PlanController {
         }
 
         return new ScheduleChartDataSet(Lists.newArrayList(resultWorkingDays), dataSet);
+    }
+
+    private List<ContactSchedule> getContactSchedule(PlanContact c, Plan plan) {
+        List<ContactSchedule> s = contactScheduleRepository.findByContactId(c.getContact().getId());
+        List<ContactSchedule> filtered = Lists.newArrayList();
+
+        for (ContactSchedule cs : s) {
+            ContactSchedule newSchedule = updateScheduleBaseOnPlan(plan, cs);
+            if (newSchedule != null) {
+                filtered.add(newSchedule);
+            }
+        }
+
+        return filtered;
     }
 
     private Map<Date, Double> getVelocities(double velocity, List<ContactSchedule> schedules, Plan plan) {
