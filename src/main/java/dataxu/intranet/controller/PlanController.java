@@ -225,6 +225,14 @@ public class PlanController {
         return srcDate.getTime();
     }
 
+    private Date getFriday(Date src) {
+        Calendar srcDate = Calendar.getInstance();
+        srcDate.setTime(src);
+        srcDate.set(Calendar.DAY_OF_WEEK, 6);
+
+        return srcDate.getTime();
+    }
+
     @RequestMapping(value = "/api/plans/{id}", method = RequestMethod.GET)
     @ResponseBody
     public Plan getPlan(@PathVariable("id") Integer id) {
@@ -280,10 +288,17 @@ public class PlanController {
         }
     }
 
-    @RequestMapping(value = "/api/plans/{id}/teammember/schedules/download", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/plans/{id}/teammember/schedules/download/{chartType}", method = RequestMethod.GET)
     public void downloadTeamMemberSchedules(@PathVariable("id") Integer planId,
             @PathVariable("chartType") String chartType, HttpServletResponse response) {
         Plan plan = planRepository.findOne(planId);
+
+        Date startDate = plan.getStartDate();
+        Date endDate = plan.getEndDate();
+        Set<Date> allWorkingDays = getDaysInWeeks(startDate, endDate);
+
+        Set<Date> allMondays = Sets.newTreeSet(getAllMondays(allWorkingDays));
+
         List<PlanContact> contacts = plan.getPlanContacts();
 
         Map<String, List<ContactSchedule>> contactSchedules = Maps.newHashMap();
@@ -318,6 +333,38 @@ public class PlanController {
         try {
             writer = new CSVWriter(response.getWriter(), ',');
 
+            List<String> header = Lists.newArrayList("Team Member/Week");
+            // header
+            for (Date d : allMondays) {
+                header.add(DATE_FORMAT.format(d));
+            }
+
+            writer.writeNext(header.toArray(new String[0]));
+
+            for (Map.Entry<String, List<ContactSchedule>> schedule : contactSchedules.entrySet()) {
+                List<String> row = Lists.newArrayList(schedule.getKey());
+
+                // stupid loop.
+                for (Date monday : allMondays) {
+                    Date friday = getFriday(monday);
+                    StringBuilder content = new StringBuilder();
+                    for (ContactSchedule cs : schedule.getValue()) {
+                        if (cs.getStartDate().after(friday) || cs.getEndDate().before(monday)) {
+                            continue;
+                        }
+
+                        Date currStart = cs.getStartDate().after(monday) ? cs.getStartDate() : monday;
+                        Date currEndDate = cs.getEndDate().before(friday) ? cs.getEndDate() : friday;
+
+                        content.append(DATE_FORMAT.format(currStart) + "-" + DATE_FORMAT.format(currEndDate) + ":"
+                                + cs.getReason() + ";");
+                    }
+
+                    row.add(content.toString());
+                }
+
+                writer.writeNext(row.toArray(new String[0]));
+            }
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
