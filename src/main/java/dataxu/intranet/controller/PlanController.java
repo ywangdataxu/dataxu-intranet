@@ -37,6 +37,7 @@ import dataxu.intranet.repository.PlanRepository;
 @Controller
 public class PlanController {
     private static final String CHART_TYPE_ACCUMULATED = "accumulated";
+    final long DAY_IN_MILLIS = 1000 * 60 * 60 * 24;
 
     public static class ChapterSchedule {
         private final Integer chapterId;
@@ -225,6 +226,10 @@ public class PlanController {
         return srcDate.getTime();
     }
 
+    private int getNumOfDays(Date date1, Date date2) {
+        return (int) ((date1.getTime() - date2.getTime()) / DAY_IN_MILLIS) + 1;
+    }
+
     private Date getFriday(Date src) {
         Calendar srcDate = Calendar.getInstance();
         srcDate.setTime(src);
@@ -348,16 +353,21 @@ public class PlanController {
                 for (Date monday : allMondays) {
                     Date friday = getFriday(monday);
                     StringBuilder content = new StringBuilder();
+
+                    int count = 0;
                     for (ContactSchedule cs : schedule.getValue()) {
                         if (cs.getStartDate().after(friday) || cs.getEndDate().before(monday)) {
                             continue;
                         }
 
-                        Date currStart = cs.getStartDate().after(monday) ? cs.getStartDate() : monday;
+                        Date currStartDate = cs.getStartDate().after(monday) ? cs.getStartDate() : monday;
                         Date currEndDate = cs.getEndDate().before(friday) ? cs.getEndDate() : friday;
 
-                        content.append(DATE_FORMAT.format(currStart) + "-" + DATE_FORMAT.format(currEndDate) + ":"
-                                + cs.getReason() + ";");
+                        if (count != 0) {
+                            content.append(";");
+                        }
+                        content.append(cs.getReason() + ":" + getNumOfDays(currEndDate, currStartDate));
+                        count++;
                     }
 
                     row.add(content.toString());
