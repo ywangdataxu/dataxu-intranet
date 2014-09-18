@@ -135,8 +135,9 @@ planApp.controller('PlanDetailController', ['$scope', '$location', '$routeParams
             }
         }
         
-        Plan.update($scope.plan);
-        $location.path('/list');
+        Plan.update($scope.plan, function() {
+            $location.path('/list');
+        });
     }
 
     $scope.toggleEngineers = function() {
