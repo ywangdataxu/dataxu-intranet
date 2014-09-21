@@ -12,7 +12,7 @@ CREATE TABLE contact (
 CREATE TABLE plan (
     id serial PRIMARY KEY,
     name varchar(255) NOT NULL,
-    description text;
+    description text,
     start_date date NOT NULL,
     end_date date NOT NULL,
     maintenance_allowance int NOT NULL default 0,
