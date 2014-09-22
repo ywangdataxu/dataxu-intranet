@@ -372,8 +372,9 @@ planApp.controller('CreateUserController', ['$scope', '$location', '$routeParams
     }
     
     $scope.createUser = function(formObj) {
-        Users.create($scope.user);
-        $location.path('/users/list');
+        Users.create($scope.user, function() {
+            $location.path('/users/list');
+        });
     }
 }]);
 
