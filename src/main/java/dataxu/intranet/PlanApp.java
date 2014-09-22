@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @ComponentScan
 @EnableAutoConfiguration
 @EnableJpaRepositories(basePackages = "dataxu.intranet.repository")
-public class Application {
+public class PlanApp {
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(PlanApp.class, args);
     }
 }

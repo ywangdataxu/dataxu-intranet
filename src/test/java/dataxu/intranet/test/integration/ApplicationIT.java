@@ -1,6 +1,6 @@
 package dataxu.intranet.test.integration;
 
-import dataxu.intranet.Application;
+import dataxu.intranet.PlanApp;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -25,7 +25,7 @@ public class ApplicationIT {
 
     @BeforeClass
     public static void start() throws Exception {
-        Callable<ConfigurableApplicationContext> callable = () -> SpringApplication.run(Application.class);
+        Callable<ConfigurableApplicationContext> callable = () -> SpringApplication.run(PlanApp.class);
         Future<ConfigurableApplicationContext> future = Executors.newSingleThreadExecutor().submit(callable);
         context = future.get(60, TimeUnit.SECONDS);
     }
