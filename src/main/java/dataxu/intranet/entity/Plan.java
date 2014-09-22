@@ -22,6 +22,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 @Entity
 @Table(name = "plan")
@@ -56,7 +57,7 @@ public class Plan implements Comparable<Plan> {
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "plan_id")
-    private Set<PlanContact> planContacts;
+    private Set<PlanContact> planContacts = Sets.newHashSet();
 
     @Column(name = "maintenance_allowance", nullable = false)
     private Integer maintenanceAllowance;
