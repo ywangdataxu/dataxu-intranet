@@ -14,7 +14,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 
 	<properties>
-		<start-class>dataxu.intranet.Application</start-class>
+		<start-class>dataxu.intranet.PlanApp</start-class>
 
 		<!-- Spring boot parent use this property to setup maven compiler plugin -->
 		<java.version>1.8</java.version>

@@ -81,12 +81,15 @@
         </form>
         </span>
     </div>
-    <div style='width:75%'>
-            <span style='float:right'>
-        <span ng-repeat='l in legend'> <span style='background: {{l.color}}'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-            {{l.name}}&nbsp;&nbsp;&nbsp;
-        </span>
+
+    <div>
+    <canvas id='myChart'></</canvas>
+    </div>
+    <div>
+        <span style='margin-left:10px'>
+            <span ng-repeat='l in legend'> <span style='background: {{l.color}}'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                {{l.name}}&nbsp;&nbsp;&nbsp;
+            </span>
         </span>
     </div>
-    <canvas id='myChart'></</canvas>
 </div>
